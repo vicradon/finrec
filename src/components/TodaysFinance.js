@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useState, useEffect } from 'react';
 import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -44,14 +44,13 @@ export default function TodaysFinances({ toLevel1Store }) {
       // { title: 'Day', field: 'day', lookup: { "Monday": "Monday", "Tuesday": "Tuesday", "Wednesday":"Wednesday", "Thursday":"Thursday", "Friday":"Friday", "Saturday":"Saturday", "Sunday":"Sunday" } },
       { title: 'Income or Expense', field: 'name' },
       { title: 'TIme', field: 'time', type: 'time' },
-      { title: 'Type', field: 'type', lookup: { "Income": "Income", "Expense": "Expense" } },
+      { title: 'Type', field: 'type', lookup: { "Expense": "Expense", "Income": "Income" } },
       { title: `Amount ₦`, field: 'amount' },
     ]
   });
-  const [todaysData, setTodaysData] = useState({data:[
-    { name: 'Bought Bread', time: '9:01:23 PM', type: 'Income', amount: 200 },
-    { name: 'Carried Block', time: '3:01:19 PM', type: 'Expense', amount: 2000 },
-  ]});
+  let initialTodaysData = JSON.parse(localStorage.getItem('finrec-userdata'))['finrec-userdata'].todaysData;
+
+  const [todaysData, setTodaysData] = useState({ data: initialTodaysData });
 
   return (
     <>

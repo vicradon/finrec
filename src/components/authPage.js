@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import startFirebaseUI, { uiConfig } from './firebase.js'
 import "../css/firebase-ui-auth.css"
 import makeStyles from '@material-ui/core/styles/makeStyles'
+// import firebase from 'firebase/app';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,10 +22,12 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+
 export default function AuthPage() {
   const classes = useStyles();
   useEffect(() => {
-    startFirebaseUI('#firebaseui-auth-container', uiConfig)
+    startFirebaseUI('#firebaseui-auth-container', uiConfig);
+  
   }, [])
 
   return (

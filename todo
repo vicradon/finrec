@@ -1,4 +1,13 @@
-Communicate with the store about data changes in the table
-Build a nested table based on weeks
-After the day ends, clear the data in the day's table
-Changes are automatically sent to store which then sends data to the weeks's data object
+Active:
+- Use suspence to load data from localstorage or firestore
+- Create a buffer which loads up data and sends it to firestore when fiiled
+- Test the app
+- Convert avatar to base64 image
+- Build a nested table based on weeks
+
+
+Archive:
+- Communicate with the store about data changes in the table @done
+- Changes are automatically sent to store which then sends data to the weeks's data object @done
+- After the day ends, clear the data in the day's table @done
+- Handle auth persistence @done

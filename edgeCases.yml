@@ -1,0 +1,8 @@
+---
+Edge Casses:
+  1:  
+    - Case: The user clears his localstorage and can't access his data for that day
+    - Handling: Sync data in the todaysFinance with that in the Main app
+  
+
+---
