@@ -1,0 +1,4 @@
+Communicate with the store about data changes in the table
+Build a nested table based on weeks
+After the day ends, clear the data in the day's table
+Changes are automatically sent to store which then sends data to the weeks's data object

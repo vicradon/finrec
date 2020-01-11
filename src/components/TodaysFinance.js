@@ -1,0 +1,115 @@
+import React, { forwardRef, useState } from 'react';
+import MaterialTable from 'material-table';
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
+// import '../css/toolbar-overide.css'
+
+const tableIcons = {
+  Add: forwardRef((props, ref) => <AddBox {...props} style={{ "color": "#3f51b5" }} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} style={{ "color": "red" }} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  Edit: forwardRef((props, ref) => <Edit {...props} style={{ "color": "#3f51b5" }} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} style={{ "color": "#3f51b5" }} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+}
+
+
+export default function TodaysFinances({toLevel1Store}) {
+  const [tableStructure, setTableStructure] = useState({
+    columns: [
+      // { title: 'Day', field: 'day', lookup: { "Monday": "Monday", "Tuesday": "Tuesday", "Wednesday":"Wednesday", "Thursday":"Thursday", "Friday":"Friday", "Saturday":"Saturday", "Sunday":"Sunday" } },
+      { title: 'Income or Expense', field: 'name' },
+      { title: 'TIme', field: 'time', type: 'time' },
+      { title: 'Type', field: 'type', lookup: { "Income": "Income", "Expense": "Expense" } },
+      { title: `Amount ₦`, field: 'amount' },
+    ]
+  });
+  const [todaysData, setTodaysData] = useState([
+    { name: 'Bought Bread', time: '9:01:23 PM', type: 'Income', amount: 200 },
+    { name: 'Carried Block', time: '3:01:19 PM', type: 'Expense', amount: 2000 },
+  ]);
+
+  return (
+    <>
+      <h3>{new Date().toDateString()}</h3>
+      <MaterialTable
+        title="Finances"
+        columns={tableStructure.columns}
+        data={todaysData}
+        icons={tableIcons}
+        options={{
+          actionsColumnIndex: -1,
+          searchFieldStyle: {
+          },
+        }}
+        currencySetting={{
+          currency: "Naira"
+        }}
+        editable={{
+          onRowAdd: newData =>
+            new Promise(resolve => {
+              setTimeout(() => {
+                resolve();
+                setTodaysData(prevState => {
+                  const data = [...prevState];
+                  data.push(newData);
+                  return { ...prevState, data };
+                });
+                toLevel1Store(todaysData)
+              }, 600);
+            }),
+          onRowUpdate: (newData, oldData) =>
+            new Promise(resolve => {
+              setTimeout(() => {
+                resolve();
+                if (oldData) {
+                  setTodaysData(prevState => {
+                    const data = [...prevState];
+                    data[data.indexOf(oldData)] = newData;
+                    return { ...prevState, data };
+                  });
+                  toLevel1Store(todaysData)
+                }
+              }, 600);
+            }),
+          onRowDelete: oldData =>
+            new Promise(resolve => {
+              setTimeout(() => {
+                resolve();
+                setTodaysData(prevState => {
+                  const data = [...prevState];
+                  data.splice(data.indexOf(oldData), 1);
+                  return { ...prevState, data };
+                });
+                toLevel1Store(todaysData)
+              }, 600);
+            }),
+        }}
+      />
+    </>
+  );
+}
