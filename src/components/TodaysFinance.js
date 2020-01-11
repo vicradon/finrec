@@ -38,8 +38,8 @@ const tableIcons = {
 }
 
 
-export default function TodaysFinances({toLevel1Store}) {
-  const [tableStructure, setTableStructure] = useState({
+export default function TodaysFinances({ toLevel1Store }) {
+  const [state, setState] = useState({
     columns: [
       // { title: 'Day', field: 'day', lookup: { "Monday": "Monday", "Tuesday": "Tuesday", "Wednesday":"Wednesday", "Thursday":"Thursday", "Friday":"Friday", "Saturday":"Saturday", "Sunday":"Sunday" } },
       { title: 'Income or Expense', field: 'name' },
@@ -48,18 +48,18 @@ export default function TodaysFinances({toLevel1Store}) {
       { title: `Amount ₦`, field: 'amount' },
     ]
   });
-  const [todaysData, setTodaysData] = useState([
+  const [todaysData, setTodaysData] = useState({data:[
     { name: 'Bought Bread', time: '9:01:23 PM', type: 'Income', amount: 200 },
     { name: 'Carried Block', time: '3:01:19 PM', type: 'Expense', amount: 2000 },
-  ]);
+  ]});
 
   return (
     <>
       <h3>{new Date().toDateString()}</h3>
       <MaterialTable
         title="Finances"
-        columns={tableStructure.columns}
-        data={todaysData}
+        columns={state.columns}
+        data={todaysData.data}
         icons={tableIcons}
         options={{
           actionsColumnIndex: -1,
@@ -75,11 +75,11 @@ export default function TodaysFinances({toLevel1Store}) {
               setTimeout(() => {
                 resolve();
                 setTodaysData(prevState => {
-                  const data = [...prevState];
+                  const data = [...prevState.data];
                   data.push(newData);
+                  toLevel1Store(data)
                   return { ...prevState, data };
                 });
-                toLevel1Store(todaysData)
               }, 600);
             }),
           onRowUpdate: (newData, oldData) =>
@@ -88,11 +88,11 @@ export default function TodaysFinances({toLevel1Store}) {
                 resolve();
                 if (oldData) {
                   setTodaysData(prevState => {
-                    const data = [...prevState];
+                    const data = [...prevState.data];
                     data[data.indexOf(oldData)] = newData;
+                    toLevel1Store(data)
                     return { ...prevState, data };
                   });
-                  toLevel1Store(todaysData)
                 }
               }, 600);
             }),
@@ -101,11 +101,11 @@ export default function TodaysFinances({toLevel1Store}) {
               setTimeout(() => {
                 resolve();
                 setTodaysData(prevState => {
-                  const data = [...prevState];
+                  const data = [...prevState.data];
                   data.splice(data.indexOf(oldData), 1);
+                  toLevel1Store(data)
                   return { ...prevState, data };
                 });
-                toLevel1Store(todaysData)
               }, 600);
             }),
         }}
