@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useEffect } from 'react';
+import React, { forwardRef, useState } from 'react';
 import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -15,6 +15,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import { Grid, Typography, Paper, makeStyles } from '@material-ui/core';
 // import '../css/toolbar-overide.css'
 
 const tableIcons = {
@@ -37,27 +38,43 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 }
 
+export function getTotal(type, data) {
+  const dataitems = data.filter(x => x.type === type)
+  if (dataitems.length > 0) {
+    return `₦ ${dataitems.map(x => +x.amount).reduce((x, y) => x + y)}`;
+  }
+  return `No ${type}`;
+}
+
+const useStyles = makeStyles(theme => ({
+  summary: {
+    padding: "2rem 1rem",
+    margin: "1rem auto"
+  },
+  summaryHeader: {
+    marginTop: 0
+  }
+}))
 
 export default function TodaysFinances({ toLevel1Store }) {
-  const [state, setState] = useState({
-    columns: [
-      // { title: 'Day', field: 'day', lookup: { "Monday": "Monday", "Tuesday": "Tuesday", "Wednesday":"Wednesday", "Thursday":"Thursday", "Friday":"Friday", "Saturday":"Saturday", "Sunday":"Sunday" } },
-      { title: 'Income or Expense', field: 'name' },
-      { title: 'TIme', field: 'time', type: 'time' },
-      { title: 'Type', field: 'type', lookup: { "Expense": "Expense", "Income": "Income" } },
-      { title: `Amount ₦`, field: 'amount' },
-    ]
-  });
-  let initialTodaysData = JSON.parse(localStorage.getItem('finrec-userdata'))['finrec-userdata'].todaysData;
+  const classes = useStyles();
+  const columns = [
+    { title: 'Income or Expense', field: 'name' },
+    { title: 'TIme', field: 'time', type: 'time' },
+    { title: 'Type', field: 'type', lookup: { "Expense": "Expense", "Income": "Income" } },
+    { title: `Amount ₦`, field: 'amount' },
+  ]
+  let initialTodaysData = JSON.parse(localStorage.getItem('finrec-userdata'))[new Date().toDateString()];
 
-  const [todaysData, setTodaysData] = useState({ data: initialTodaysData });
+  const [todaysData, setTodaysData] = useState({ "data": initialTodaysData });
+  
 
   return (
     <>
       <h3>{new Date().toDateString()}</h3>
       <MaterialTable
         title="Finances"
-        columns={state.columns}
+        columns={columns}
         data={todaysData.data}
         icons={tableIcons}
         options={{
@@ -109,6 +126,23 @@ export default function TodaysFinances({ toLevel1Store }) {
             }),
         }}
       />
+      <Paper elevation={3} className={classes.summary}>
+        <h3 className={classes.summaryHeader}>Summary</h3>
+        <Grid container>
+
+          <Grid container item xs={12}>
+            <Grid item xs={6}>Total Expense:</Grid>
+            <Grid item xs={6}>{getTotal('Expense', todaysData.data)}</Grid>
+          </Grid>
+
+          <Grid container item xs={12}>
+            <Grid item xs={6}>Total Income:</Grid>
+            <Grid item xs={6}>{getTotal('Income', todaysData.data)}</Grid>
+          </Grid>
+
+        </Grid>
+      </Paper>
+
     </>
   );
 }

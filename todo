@@ -4,7 +4,7 @@ Active:
 - Test the app
 - Convert avatar to base64 image
 - Build a nested table based on weeks
-
+- Fix the bug of the buffer increment increasing twice
 
 Archive:
 - Communicate with the store about data changes in the table @done
