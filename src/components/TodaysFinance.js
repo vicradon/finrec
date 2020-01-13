@@ -15,7 +15,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { Grid, Typography, Paper, makeStyles } from '@material-ui/core';
+import { Grid, Paper, makeStyles } from '@material-ui/core';
 // import '../css/toolbar-overide.css'
 
 const tableIcons = {
@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default function TodaysFinances({ toLevel1Store }) {
+export default function TodaysFinances({ initialData, toLevel1Store }) {
   const classes = useStyles();
   const columns = [
     { title: 'Income or Expense', field: 'name' },
@@ -64,10 +64,10 @@ export default function TodaysFinances({ toLevel1Store }) {
     { title: 'Type', field: 'type', lookup: { "Expense": "Expense", "Income": "Income" } },
     { title: `Amount ₦`, field: 'amount' },
   ]
-  let initialTodaysData = JSON.parse(localStorage.getItem('finrec-userdata'))[new Date().toDateString()];
+  // let initialTodaysData = JSON.parse(localStorage.getItem('finrec-userdata'))[new Date().toDateString()];
 
-  const [todaysData, setTodaysData] = useState({ "data": initialTodaysData });
-  
+  const [todaysData, setTodaysData] = useState({ "data": initialData });
+
 
   return (
     <>

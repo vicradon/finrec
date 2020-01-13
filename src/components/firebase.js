@@ -15,7 +15,7 @@ const config = ({
 
 // This is our firebaseui configuration object
 export const uiConfig = ({
-  signInSuccessUrl: '/home',
+  signInSuccessUrl: './home',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.FacebookAuthProvider.PROVIDER_ID,

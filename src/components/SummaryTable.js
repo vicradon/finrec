@@ -23,15 +23,8 @@ const tableIcons = {
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
 }
 
-function CurrentCash() {
-  return (
-    <h3>Current cash: ₦ {JSON.parse(localStorage.getItem('finrec-settings')).currentCash}</h3>
-  )
-}
-
-
-export default function SummaryTable() {
-  const localData = JSON.parse(localStorage.getItem('finrec-userdata'));
+export default function SummaryTable({ allData, initialCash, totalIncome, totalExpense }) {
+  const localData = allData;
   const dataitems = [];
   for (let i in localData) {
     dataitems.push({
@@ -40,9 +33,14 @@ export default function SummaryTable() {
       income: getTotal('Income', localData[i])
     })
   }
+  function DisplayedCash() {
+    return (
+      <h3>Current cash: ₦ {initialCash + totalIncome + totalExpense}</h3>
+    )
+  }
   return (
     <>
-      <CurrentCash />
+      <DisplayedCash />
       <MaterialTable
         title="Financial Summary"
         icons={tableIcons}

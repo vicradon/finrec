@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useEffect } from 'react'
+import React, { useState } from 'react'
 import firebase from "firebase/app";
 import 'firebase/firestore';
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -55,31 +55,95 @@ function buffer(uid, allData) {
 }
 
 export default function MainApp() {
-  useEffect(() => {
-    localStorage.setItem('finrec-settings', JSON.stringify({ currentCash: 0 }))
-  })
+  // useEffect(() => {
+  //   localStorage.setItem('finrec-userdata', JSON.stringify({ currentCash: 0, days: { "Sat Jan 11 2020": [], "Sun Jan 12 2020": [{ "name": "Stuff", "time": "2020-01-12T00:39:12.544Z", "type": "Expense", "amount": "130", "tableData": { "id": 0 } }] } }))
+  // })
+
 
   const { displayName, photoURL, uid } = JSON.parse(localStorage.getItem('finrec-userdetails'))
 
-  const initialState = {
-    'Sat Jan 11 2020': [],
-    'Sun Jan 12 2020': [],
+  let initialState = {
+    initialCash: 0,
+    totalIncome: 0,
+    totalExpense: 0,
+    days: {
+      [new Date().toDateString()]: []
+    }
+  }
+  if (localStorage.getItem('finrec-userdata')) {
+    initialState = JSON.parse(localStorage.getItem('finrec-userdata'));
   }
 
   const [allData, setAllData] = useState(initialState)
 
-
-  function toLevel1Store(todaysData) {
+  function setInitialCash(value) {
     return new Promise(resolve => {
       setAllData(prevData => ({
         ...prevData,
-        [new Date().toDateString()]: todaysData,
+        initialCash: value
       }))
-      resolve({ ...allData, [new Date().toDateString()]: todaysData })
+      resolve({ ...allData, initialCash: value })
     })
       .then(res => {
-        let income = +getTotal('Income', res[new Date().toDateString()]).split(' ').slice(1);
-        let expense = -(+getTotal('Expense', res[new Date().toDateString()]).split(' ').slice(1));
+        storeAndBuffer(res)
+      })
+  }
+  // function setDisplayedCash(value) {
+  //   return new Promise(resolve => {
+  //     setAllData(prevData => ({
+  //       ...prevData,
+  //       displayedCash: value
+  //     }))
+  //     resolve({ ...allData, displayedCash: value })
+  //   })
+  //     .then(res => {
+  //       storeAndBuffer(res)
+  //     })
+  // }
+
+  function setIncomeAndExpense(income, expense) {
+    return new Promise(resolve => {
+      setAllData(prevData => ({
+        ...prevData,
+        totalExpense: expense,
+        totalIncome: income
+      }))
+      console.log({ ...allData, totalExpense: expense, totalIncome: income })
+      resolve({ ...allData, totalExpense: expense, totalIncome: income })
+    })
+      .then(res => {
+        storeAndBuffer(res)
+      })
+  }
+
+  function storeAndBuffer(res) {
+    localStorage.setItem('finrec-userdata', JSON.stringify(res))
+    buffer(uid, res);
+  }
+
+
+  function toLevel1Store(todaysData) {
+
+    return new Promise(resolve => {
+
+      setAllData(prevData => ({
+        ...prevData,
+        days: {
+          ...prevData.days,
+          [new Date().toDateString()]: todaysData,
+        }
+      }))
+      resolve({
+        ...allData,
+        days: {
+          ...allData.days,
+          [new Date().toDateString()]: todaysData,
+        }
+      })
+    })
+      .then(res => {
+        let income = +getTotal('Income', res.days[new Date().toDateString()]).split(' ').slice(1);
+        let expense = -(+getTotal('Expense', res.days[new Date().toDateString()]).split(' ').slice(1));
 
         if (isNaN(income)) {
           income = 0
@@ -87,14 +151,27 @@ export default function MainApp() {
         if (isNaN(expense)) {
           expense = 0
         }
-        const newAmt = JSON.parse(localStorage.getItem('finrec-settings')).currentCash + income + expense;
-        console.log(newAmt)
-
-
-        localStorage.setItem('finrec-settings', JSON.stringify({ currentCash: newAmt }))
-
-        localStorage.setItem('finrec-userdata', JSON.stringify(res))
-        buffer(uid, res);
+        setIncomeAndExpense(income, expense);
+        /*
+        new Promise(resolve => {
+          setAllData(prevData => {
+            const value = +prevData.initialCash + (income + expense);
+            console.log({
+              ...prevData,
+              displayedCash: value
+            })
+            return {
+              ...prevData,
+              displayedCash: value
+            }
+          })
+          resolve({ ...allData, displayedCash: value })
+        })
+          .then(res => {
+            console.log(res, allData)
+            // storeAndBuffer(res)  
+          })
+          */
       })
   }
 
@@ -122,17 +199,23 @@ export default function MainApp() {
           <div className={classes.content} />
           <TodaysFinances
             toLevel1Store={toLevel1Store}
+            initialData={allData.days[new Date().toDateString()]}
           />
         </TabPanel>
 
         <TabPanel value={value} index={1}>
           <div className={classes.content} />
-          <SummaryTable />
+          <SummaryTable
+            allData={allData.days}
+            initialCash={allData.initialCash}
+            totalIncome={allData.totalIncome}
+            totalExpense={allData.totalExpense}
+          />
         </TabPanel>
 
         <TabPanel value={value} index={2}>
           <div className={classes.content} />
-          <Settings />
+          <Settings initialCash={allData.initialCash} setInitialCash={setInitialCash} />
         </TabPanel>
 
         <BottomNav value={value} setValue={setValue} stickToBottom={classes.stickToBottom} />

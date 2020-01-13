@@ -10,34 +10,35 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
   }
 }));
-export default function Settings() {
+export default function Settings({initialCash, displayedCash, setDisplayedCash, setInitialCash}) {
   const classes = useStyles();
-  const initialState = JSON.parse(localStorage.getItem('finrec-settings')).currentCash;
-  // if (localStorage.getItem('finrec-settings').currentCash) {
-  //   initialState = JSON.parse(localStorage.getItem('finrec-settings')).currentCash;
-  // }
-  // else {
-  //   localStorage.setItem('finrec-settings', JSON.stringify({ currentCash: 0 }))
-  //   initialState = 0;
-  // }
+  
   const [values, setValues] = useState({
-    currentCash: initialState,
+    initialCash: initialCash
   });
 
   const handleChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value });
-    localStorage.setItem('finrec-settings', JSON.stringify({ currentCash: event.target.value }));
+    new Promise(resolve => {
+      setValues({ ...values, [prop]: event.target.value });
+      resolve({ ...values, [prop]: event.target.value })
+    })
+    .then(res => {
+      setInitialCash(+res.initialCash)
+      // setDisplayedCash(+res.initialCash + displayedCash)
+      // console.log(res, +res.initialCash, displayedCash, +res.initialCash + displayedCash)
+    })
   };
 
   return (
     <>
       <h3>Settings</h3>
       <FormControl fullWidth className={classes.margin}>
-        <InputLabel htmlFor="standard-adornment-amount">"Current Cash"</InputLabel>
+        <InputLabel htmlFor="standard-adornment-amount">"Initial Cash"</InputLabel>
         <Input
+          type = "number"
           id="standard-adornment-amount"
-          value={values.currentCash}
-          onChange={handleChange('currentCash')}
+          value={initialCash}
+          onChange={handleChange('initialCash')}
           startAdornment={<InputAdornment position="start">₦</InputAdornment>}
         />
       </FormControl>

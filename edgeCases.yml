@@ -3,6 +3,9 @@ Edge Casses:
   1:  
     - Case: The user clears his localstorage and can't access his data for that day
     - Handling: Sync data in the todaysFinance with that in the Main app
+  2:
+    - Case: The user altering their initial cash once they enter the app
+    - Handling: Find a way to make initial cash alter the value of state
   
 
 ---
