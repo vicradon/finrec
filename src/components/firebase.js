@@ -15,7 +15,7 @@ const config = ({
 
 // This is our firebaseui configuration object
 export const uiConfig = ({
-  signInSuccessUrl: './home',
+  signInSuccessUrl: 'https://finrec.netlify.com/home',
   signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.FacebookAuthProvider.PROVIDER_ID,
