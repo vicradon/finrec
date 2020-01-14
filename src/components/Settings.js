@@ -24,8 +24,6 @@ export default function Settings({initialCash, displayedCash, setDisplayedCash, 
     })
     .then(res => {
       setInitialCash(+res.initialCash)
-      // setDisplayedCash(+res.initialCash + displayedCash)
-      // console.log(res, +res.initialCash, displayedCash, +res.initialCash + displayedCash)
     })
   };
 

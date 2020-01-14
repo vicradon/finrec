@@ -62,19 +62,13 @@ export default function MainApp() {
     }
   }
 
-  // let initialStateRef = React.useRef(initialState);
-
   if (localStorage.getItem('finrec-userdata')) {
-    // setAllData(prevData => {
-    //   return JSON.parse(localStorage.getItem('finrec-userdata'))
-    // });
     initialState = JSON.parse(localStorage.getItem('finrec-userdata'))
   }
 
   const [allData, setAllData] = useState(initialState);
 
   useEffect(() => {
-
     const monthVal = { 'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'June': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12 }
     const mostRecent = Object.keys(allData.days).map(x => +`${monthVal[x.slice(4, 7)]}${+x.slice(8, 10)}`).sort((a, b) => b - a)[0];
 
@@ -97,7 +91,7 @@ export default function MainApp() {
         ...prevData,
         initialCash: value
       }
-    });
+    })
     storeAndBuffer({ ...allData, initialCash: value })
   }
 
@@ -109,19 +103,6 @@ export default function MainApp() {
 
 
   function toLevel1Store(todaysData) {
-    const setDays = (days, todaysData) => {
-      return {
-        ...days,
-        [new Date().toDateString()]: todaysData,
-      }
-    }
-    setAllData(prevData => {
-      const days = setDays(prevData.days, todaysData);
-      return {
-        ...prevData,
-        days: days
-      }
-    })
     const res = {
       ...allData,
       days: {
@@ -129,8 +110,6 @@ export default function MainApp() {
         [new Date().toDateString()]: todaysData,
       }
     }
-    // setAllData(res);
-    console.log(allData, res);
 
     let income = +getTotal('Income', res.days[new Date().toDateString()]).split(' ').slice(1);
     let expense = -(+getTotal('Expense', res.days[new Date().toDateString()]).split(' ').slice(1));
@@ -142,13 +121,19 @@ export default function MainApp() {
       expense = 0
     }
 
-    const returnedObject = {
-      ...res,
-      totalIncome: income,
-      totalExpense: expense
-    }
-    storeAndBuffer(returnedObject)
-    console.log(allData)
+    setAllData(prevData => {
+      const returnedObject = {
+        ...prevData,
+        totalIncome: income,
+        totalExpense: expense,
+        days: {
+          ...prevData.days,
+          [new Date().toDateString()]: todaysData,
+        }
+      }
+      storeAndBuffer(returnedObject)
+      return returnedObject
+    })
   }
 
 
@@ -186,9 +171,6 @@ export default function MainApp() {
             initialCash={allData.initialCash}
             totalIncome={allData.totalIncome}
             totalExpense={allData.totalExpense}
-          // initialCash={JSON.parse(localStorage.getItem('finrec-userdata')).initialCash}
-          // totalIncome={JSON.parse(localStorage.getItem('finrec-userdata')).totalIncome}
-          // totalExpense={JSON.parse(localStorage.getItem('finrec-userdata')).totalExpense}
           />
         </TabPanel>
 
