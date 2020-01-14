@@ -41,16 +41,17 @@ export default function SummaryTable({ allData, initialCash, totalIncome, totalE
   return (
     <>
       <DisplayedCash />
-      <MaterialTable
-        title="Financial Summary"
-        icons={tableIcons}
-        data={dataitems}
-        columns={[
-          { title: 'Date', field: 'date' },
-          { title: 'Income', field: 'income' },
-          { title: 'Expense', field: 'expense' },
-        ]}
-      />
+        <MaterialTable
+          title="Financial Summary"
+          icons={tableIcons}
+          data={dataitems}
+          options={{search:false}}
+          columns={[
+            { title: 'Date', field: 'date' },
+            { title: 'Income', field: 'income' },
+            { title: 'Expense', field: 'expense' },
+          ]}
+        />
     </>
   )
 }

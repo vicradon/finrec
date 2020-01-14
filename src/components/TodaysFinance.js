@@ -59,12 +59,18 @@ const useStyles = makeStyles(theme => ({
 export default function TodaysFinances({ initialData, toLevel1Store }) {
   const classes = useStyles();
   const columns = [
-    { title: 'Income or Expense', field: 'name' },
-    { title: 'TIme', field: 'time', type: 'time' },
+        { title: 'Entry', field: 'name' },
+    {
+      title: `Amount ₦`, field: 'amount', type: 'numeric', cellStyle: {
+        textAlign:'center'
+      },
+      headerStyle: {
+        textAlign:'left',
+      }
+    },
     { title: 'Type', field: 'type', lookup: { "Expense": "Expense", "Income": "Income" } },
-    { title: `Amount ₦`, field: 'amount' },
+    { title: 'Time', field: 'time', type: 'time' }
   ]
-  // let initialTodaysData = JSON.parse(localStorage.getItem('finrec-userdata'))[new Date().toDateString()];
 
   const [todaysData, setTodaysData] = useState({ "data": initialData });
 
@@ -79,8 +85,7 @@ export default function TodaysFinances({ initialData, toLevel1Store }) {
         icons={tableIcons}
         options={{
           actionsColumnIndex: -1,
-          searchFieldStyle: {
-          },
+          search: false,
         }}
         currencySetting={{
           currency: "Naira"

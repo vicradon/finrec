@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import firebase from "firebase/app";
 import 'firebase/firestore';
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -6,7 +6,7 @@ import BottomNav from './BottomNav';
 import TodaysFinances, { getTotal } from './TodaysFinance';
 import TabPanel from './TabPanel'
 import Avatar from '@material-ui/core/Avatar';
-import { deepOrange, deepPurple } from '@material-ui/core/colors';
+import { deepPurple } from '@material-ui/core/colors';
 import SummaryTable from './SummaryTable';
 import Settings from './Settings';
 
@@ -33,10 +33,6 @@ const useStyles = makeStyles(theme => ({
       width: "calc(100vw - 50px)"
     }
   },
-  orange: {
-    color: theme.palette.getContrastText(deepOrange[500]),
-    backgroundColor: deepOrange[500],
-  },
   purple: {
     color: theme.palette.getContrastText(deepPurple[500]),
     backgroundColor: deepPurple[500],
@@ -55,11 +51,6 @@ function buffer(uid, allData) {
 }
 
 export default function MainApp() {
-  // useEffect(() => {
-  //   localStorage.setItem('finrec-userdata', JSON.stringify({ currentCash: 0, days: { "Sat Jan 11 2020": [], "Sun Jan 12 2020": [{ "name": "Stuff", "time": "2020-01-12T00:39:12.544Z", "type": "Expense", "amount": "130", "tableData": { "id": 0 } }] } }))
-  // })
-
-
   const { displayName, photoURL, uid } = JSON.parse(localStorage.getItem('finrec-userdetails'))
 
   let initialState = {
@@ -70,51 +61,46 @@ export default function MainApp() {
       [new Date().toDateString()]: []
     }
   }
+
+  // let initialStateRef = React.useRef(initialState);
+
   if (localStorage.getItem('finrec-userdata')) {
-    initialState = JSON.parse(localStorage.getItem('finrec-userdata'));
+    // setAllData(prevData => {
+    //   return JSON.parse(localStorage.getItem('finrec-userdata'))
+    // });
+    initialState = JSON.parse(localStorage.getItem('finrec-userdata'))
   }
 
-  const [allData, setAllData] = useState(initialState)
+  const [allData, setAllData] = useState(initialState);
+
+  useEffect(() => {
+
+    const monthVal = { 'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'June': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12 }
+    const mostRecent = Object.keys(allData.days).map(x => +`${monthVal[x.slice(4, 7)]}${+x.slice(8, 10)}`).sort((a, b) => b - a)[0];
+
+    if (`${new Date().getUTCMonth() + 1}${new Date().getUTCDate()}` !== mostRecent) {
+      setAllData(prevData => {
+        return {
+          ...prevData,
+          days: {
+            ...prevData.days,
+            [new Date().toDateString()]: []
+          }
+        }
+      })
+    }
+  }, []);
 
   function setInitialCash(value) {
-    return new Promise(resolve => {
-      setAllData(prevData => ({
+    setAllData(prevData => {
+      return {
         ...prevData,
         initialCash: value
-      }))
-      resolve({ ...allData, initialCash: value })
-    })
-      .then(res => {
-        storeAndBuffer(res)
-      })
+      }
+    });
+    storeAndBuffer({ ...allData, initialCash: value })
   }
-  // function setDisplayedCash(value) {
-  //   return new Promise(resolve => {
-  //     setAllData(prevData => ({
-  //       ...prevData,
-  //       displayedCash: value
-  //     }))
-  //     resolve({ ...allData, displayedCash: value })
-  //   })
-  //     .then(res => {
-  //       storeAndBuffer(res)
-  //     })
-  // }
 
-  function setIncomeAndExpense(income, expense) {
-    return new Promise(resolve => {
-      setAllData(prevData => ({
-        ...prevData,
-        totalExpense: expense,
-        totalIncome: income
-      }))
-      console.log({ ...allData, totalExpense: expense, totalIncome: income })
-      resolve({ ...allData, totalExpense: expense, totalIncome: income })
-    })
-      .then(res => {
-        storeAndBuffer(res)
-      })
-  }
 
   function storeAndBuffer(res) {
     localStorage.setItem('finrec-userdata', JSON.stringify(res))
@@ -123,63 +109,53 @@ export default function MainApp() {
 
 
   function toLevel1Store(todaysData) {
-
-    return new Promise(resolve => {
-
-      setAllData(prevData => ({
+    const setDays = (days, todaysData) => {
+      return {
+        ...days,
+        [new Date().toDateString()]: todaysData,
+      }
+    }
+    setAllData(prevData => {
+      const days = setDays(prevData.days, todaysData);
+      return {
         ...prevData,
-        days: {
-          ...prevData.days,
-          [new Date().toDateString()]: todaysData,
-        }
-      }))
-      resolve({
-        ...allData,
-        days: {
-          ...allData.days,
-          [new Date().toDateString()]: todaysData,
-        }
-      })
+        days: days
+      }
     })
-      .then(res => {
-        let income = +getTotal('Income', res.days[new Date().toDateString()]).split(' ').slice(1);
-        let expense = -(+getTotal('Expense', res.days[new Date().toDateString()]).split(' ').slice(1));
+    const res = {
+      ...allData,
+      days: {
+        ...allData.days,
+        [new Date().toDateString()]: todaysData,
+      }
+    }
+    // setAllData(res);
+    console.log(allData, res);
 
-        if (isNaN(income)) {
-          income = 0
-        }
-        if (isNaN(expense)) {
-          expense = 0
-        }
-        setIncomeAndExpense(income, expense);
-        /*
-        new Promise(resolve => {
-          setAllData(prevData => {
-            const value = +prevData.initialCash + (income + expense);
-            console.log({
-              ...prevData,
-              displayedCash: value
-            })
-            return {
-              ...prevData,
-              displayedCash: value
-            }
-          })
-          resolve({ ...allData, displayedCash: value })
-        })
-          .then(res => {
-            console.log(res, allData)
-            // storeAndBuffer(res)  
-          })
-          */
-      })
+    let income = +getTotal('Income', res.days[new Date().toDateString()]).split(' ').slice(1);
+    let expense = -(+getTotal('Expense', res.days[new Date().toDateString()]).split(' ').slice(1));
+
+    if (isNaN(income)) {
+      income = 0
+    }
+    if (isNaN(expense)) {
+      expense = 0
+    }
+
+    const returnedObject = {
+      ...res,
+      totalIncome: income,
+      totalExpense: expense
+    }
+    storeAndBuffer(returnedObject)
+    console.log(allData)
   }
+
 
 
 
   const classes = useStyles();
 
-  const colors = [classes.orange, classes.purple];
   const [value, setValue] = React.useState(0);
   const initials = displayName.split(' ').map(x => x[0]).join('');
 
@@ -191,7 +167,7 @@ export default function MainApp() {
         {
           navigator.onLine ?
             <Avatar src={photoURL} alt="User avatar" /> :
-            <Avatar className={colors[Math.floor((Math.random() * 2))]}>{initials}</Avatar>
+            <Avatar className={classes.purple}>{initials}</Avatar>
         }
       </div>
       <div>
@@ -210,6 +186,9 @@ export default function MainApp() {
             initialCash={allData.initialCash}
             totalIncome={allData.totalIncome}
             totalExpense={allData.totalExpense}
+          // initialCash={JSON.parse(localStorage.getItem('finrec-userdata')).initialCash}
+          // totalIncome={JSON.parse(localStorage.getItem('finrec-userdata')).totalIncome}
+          // totalExpense={JSON.parse(localStorage.getItem('finrec-userdata')).totalExpense}
           />
         </TabPanel>
 
