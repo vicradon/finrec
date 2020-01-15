@@ -55,8 +55,14 @@ export default function MainApp() {
 
   let initialState = {
     initialCash: 0,
-    totalIncome: 0,
-    totalExpense: 0,
+    today: {
+      totalIncome: 0,
+      totalExpense: 0,
+    },
+    cummulative: {
+      totalIncome: 0,
+      totalExpense: 0,
+    },
     days: {
       [new Date().toDateString()]: []
     }
@@ -69,10 +75,11 @@ export default function MainApp() {
   const [allData, setAllData] = useState(initialState);
 
   useEffect(() => {
-    const monthVal = { 'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'June': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12 }
-    const mostRecent = Object.keys(allData.days).map(x => +`${monthVal[x.slice(4, 7)]}${+x.slice(8, 10)}`).sort((a, b) => b - a)[0];
+    const monthVal = { 'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'June': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12 };
+    const dayVal = { 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6, 'Sun': 7 };
+    const mostRecent = Object.keys(allData.days).map(x => +`${monthVal[x.slice(4, 7)]}${+x.slice(8, 10)}${dayVal[x.slice(0, 3)]}`).sort((a, b) => b - a)[0];
 
-    if (`${new Date().getUTCMonth() + 1}${new Date().getUTCDate()}` !== mostRecent) {
+    if (`${new Date().getUTCMonth() + 1}${new Date().getUTCDate()}${new Date().getUTCDay()}` !== mostRecent) {
       setAllData(prevData => {
         return {
           ...prevData,
@@ -84,6 +91,17 @@ export default function MainApp() {
       })
     }
   }, []);
+
+  function dateToUse() {
+    const monthVal = { 'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'June': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12 }
+    const dayVal = { 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6, 'Sun': 7 };
+    const mostRecent = Object.keys(allData.days).map(x => +`${monthVal[x.slice(4, 7)]}${+x.slice(8, 10)}${dayVal[x.slice(0, 3)]}`).sort((a, b) => b - a)[0];
+    const getKey = (object, value) => Object.keys(object).find(key => object[key] === value);
+    const month = getKey(monthVal, +String(mostRecent).split('')[0]);
+    const day = getKey(dayVal, +String(mostRecent).split('')[3]);
+    const monthDay = +String(mostRecent).split('').slice(1, 3).join('');
+    return `${day} ${month} ${monthDay} 2020`
+  }
 
   function setInitialCash(value) {
     setAllData(prevData => {
@@ -111,21 +129,39 @@ export default function MainApp() {
       }
     }
 
-    let income = +getTotal('Income', res.days[new Date().toDateString()]).split(' ').slice(1);
-    let expense = -(+getTotal('Expense', res.days[new Date().toDateString()]).split(' ').slice(1));
+    let todaysIncome = +getTotal('Income', res.days[new Date().toDateString()]).split(' ').slice(1);
+    let todaysExpense = -(+getTotal('Expense', res.days[new Date().toDateString()]).split(' ').slice(1));
 
-    if (isNaN(income)) {
-      income = 0
+    if (isNaN(todaysIncome)) {
+      todaysIncome = 0
     }
-    if (isNaN(expense)) {
-      expense = 0
+    if (isNaN(todaysExpense)) {
+      todaysExpense = 0
+    }
+
+    function getCummulative(type) {
+      let cummulative = 0;
+      for (let i in res.days) {
+        cummulative += res.days[i].map(x => {
+          let a = 0;
+          if (x.type === type) a = +x.amount;
+          return a;
+        }).reduce((x, y) => x + y);
+      }
+      return cummulative;
     }
 
     setAllData(prevData => {
       const returnedObject = {
         ...prevData,
-        totalIncome: income,
-        totalExpense: expense,
+        today: {
+          totalIncome: todaysIncome,
+          totalExpense: todaysExpense,
+        },
+        cummulative: {
+          totalIncome: getCummulative('Income'),
+          totalExpense: -getCummulative('Expense'),
+        },
         days: {
           ...prevData.days,
           [new Date().toDateString()]: todaysData,
@@ -135,7 +171,6 @@ export default function MainApp() {
       return returnedObject
     })
   }
-
 
 
 
@@ -160,7 +195,7 @@ export default function MainApp() {
           <div className={classes.content} />
           <TodaysFinances
             toLevel1Store={toLevel1Store}
-            initialData={allData.days[new Date().toDateString()]}
+            initialData={allData.days[dateToUse()]}
           />
         </TabPanel>
 
@@ -169,8 +204,8 @@ export default function MainApp() {
           <SummaryTable
             allData={allData.days}
             initialCash={allData.initialCash}
-            totalIncome={allData.totalIncome}
-            totalExpense={allData.totalExpense}
+            totalIncome={allData.cummulative.totalIncome}
+            totalExpense={allData.cummulative.totalExpense}
           />
         </TabPanel>
 

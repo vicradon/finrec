@@ -1,3 +1,5 @@
+let version = '1.1';
+console.log("Service worker version", version);
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.

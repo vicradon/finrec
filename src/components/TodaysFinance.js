@@ -59,13 +59,13 @@ const useStyles = makeStyles(theme => ({
 export default function TodaysFinances({ initialData, toLevel1Store }) {
   const classes = useStyles();
   const columns = [
-        { title: 'Entry', field: 'name' },
+    { title: 'Entry', field: 'name' },
     {
       title: `Amount ₦`, field: 'amount', type: 'numeric', cellStyle: {
-        textAlign:'center'
+        textAlign: 'center'
       },
       headerStyle: {
-        textAlign:'left',
+        textAlign: 'left',
       }
     },
     { title: 'Type', field: 'type', lookup: { "Expense": "Expense", "Income": "Income" } },
