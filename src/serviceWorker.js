@@ -1,4 +1,4 @@
-let version = '1.1';
+let version = '2.1';
 console.log("Service worker version", version);
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
