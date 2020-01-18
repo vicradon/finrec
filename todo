@@ -1,8 +1,9 @@
 Active:
-- Use suspence to load data from localstorage or firestore
 - Test the app
 - Convert avatar to base64 image
 - Build a nested table based on weeks
+- But some form of settings in the charts area
+- For now, just render the last 7 days
 
 Archive:
 - Create a buffer which loads up data and sends it to firestore when fiiled @done

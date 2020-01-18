@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 function buffer(uid, allData) {
   const currentBufferSize = +localStorage.getItem('finrec-buffer');
   localStorage.setItem('finrec-buffer', currentBufferSize + 1);
-  if (localStorage.getItem('finrec-buffer') % 5 === 0) {
+  if (localStorage.getItem('finrec-buffer') % 5 === 0 && navigator.isOnline) {
     firebase.firestore().collection('users').doc(uid)
       .set({ "allData": allData })
   }
@@ -222,7 +222,7 @@ export default function MainApp() {
         }
       </div>
       <div>
-        <TabPanel value={value} index={0}>
+        <TabPanel value={value} index={3}>
           <div className={classes.content} />
           <TodaysFinances
             toLevel1Store={toLevel1Store}
@@ -245,9 +245,9 @@ export default function MainApp() {
           <Settings initialCash={allData.initialCash} setInitialCash={setInitialCash} />
         </TabPanel>
        
-        <TabPanel value={value} index={3}>
+        <TabPanel value={value} index={0}>
           <div className={classes.content} />
-          <Charts />
+          <Charts days = {allData.days} />
         </TabPanel>
 
         <BottomNav value={value} setValue={setValue} stickToBottom={classes.stickToBottom} />
