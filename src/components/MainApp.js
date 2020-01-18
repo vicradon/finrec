@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import firebase from "firebase/app";
 import 'firebase/firestore';
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -51,8 +51,17 @@ function buffer(uid, allData) {
 }
 
 export default function MainApp() {
-  const { displayName, photoURL, uid } = JSON.parse(localStorage.getItem('finrec-userdetails'))
-
+  let displayName, photoURL, uid;
+  if (localStorage.getItem('finrec-userdetails')) {
+    const userdetails = JSON.parse(localStorage.getItem('finrec-userdetails'));
+    displayName = userdetails.displayName;
+    photoURL = userdetails.photoURL;
+    uid = userdetails.uid;
+  } else {
+    displayName = '';
+    photoURL = '';
+    uid = '';
+  }
   let initialState = {
     initialCash: 0,
     today: {
@@ -68,30 +77,31 @@ export default function MainApp() {
     }
   }
 
-  if (localStorage.getItem('finrec-userdata')) {
-    initialState = JSON.parse(localStorage.getItem('finrec-userdata'))
+  function checkMostRecentDay(stateData) {
+    const monthVal = { 'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'June': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12 };
+    const dayVal = { 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6, 'Sun': 7 };
+    const mostRecent = Object.keys(stateData.days).map(x => +`${monthVal[x.slice(4, 7)]}${+x.slice(8, 10)}${dayVal[x.slice(0, 3)]}`).sort((a, b) => b - a)[0];
+    return mostRecent;
   }
+
+  if (localStorage.getItem('finrec-userdata')) {
+    let unstableState = JSON.parse(localStorage.getItem('finrec-userdata'));
+    if (`${new Date().getUTCMonth() + 1}${new Date().getUTCDate()}${new Date().getUTCDay()}` !== checkMostRecentDay(unstableState)) {
+      initialState = {
+        ...unstableState,
+        days: {
+          ...unstableState.days,
+          [new Date().toDateString()]: []
+        }
+      }
+    } else {
+      initialState = unstableState;
+    }
+  }
+
 
   const [allData, setAllData] = useState(initialState);
 
-  useEffect(() => {
-    const monthVal = { 'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'June': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12 };
-    const dayVal = { 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6, 'Sun': 7 };
-    const mostRecent = Object.keys(allData.days).map(x => +`${monthVal[x.slice(4, 7)]}${+x.slice(8, 10)}${dayVal[x.slice(0, 3)]}`).sort((a, b) => b - a)[0];
-
-    if (`${new Date().getUTCMonth() + 1}${new Date().getUTCDate()}${new Date().getUTCDay()}` !== mostRecent) {
-      setAllData(prevData => {
-        return {
-          ...prevData,
-          days: {
-            ...prevData.days,
-            [new Date().toDateString()]: []
-          }
-        }
-      })
-    }
-  }, []);
-  
   const stuff = {
     "initialCash": 0,
     "today": {
@@ -100,7 +110,7 @@ export default function MainApp() {
     },
     "cummulative": {
       "totalIncome": 0,
-      "totalExpense": -500
+      "totalExpense": -750
     },
     "days": {
       "Wed Jan 15 2020": [
@@ -112,17 +122,6 @@ export default function MainApp() {
         { "name": "more stuff", "amount": "300", "type": "Expense", "time": "2020-01-16T16:54:18.674Z", "tableData": { "id": 1 } }
       ]
     }
-  }
-
-  function dateToUse() {
-    const monthVal = { 'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'June': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12 }
-    const dayVal = { 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6, 'Sun': 7 };
-    const mostRecent = Object.keys(allData.days).map(x => +`${monthVal[x.slice(4, 7)]}${+x.slice(8, 10)}${dayVal[x.slice(0, 3)]}`).sort((a, b) => b - a)[0];
-    const getKey = (object, value) => Object.keys(object).find(key => object[key] === value);
-    const month = getKey(monthVal, +String(mostRecent).split('')[0]);
-    const day = getKey(dayVal, +String(mostRecent).split('')[3]);
-    const monthDay = +String(mostRecent).split('').slice(1, 3).join('');
-    return `${day} ${month} ${monthDay} 2020`
   }
 
   function setInitialCash(value) {
@@ -194,8 +193,6 @@ export default function MainApp() {
     })
   }
 
-
-
   const classes = useStyles();
 
   const [value, setValue] = React.useState(0);
@@ -207,7 +204,6 @@ export default function MainApp() {
   }
 
   return (
-
     <div className={classes.container}>
       <div className={classes.user}>
         <h3>{displayName}</h3>

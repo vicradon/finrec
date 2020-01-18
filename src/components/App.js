@@ -1,17 +1,27 @@
 import React from 'react';
-import "../css/firebase-ui-auth.css"
-import CssBaseline from '@material-ui/core/CssBaseline'
+import "../css/firebase-ui-auth.css";
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { Router } from '@reach/router';
 import AuthPage from './authPage';
 import MainApp from './MainApp';
+import firebase from 'firebase/app';
 
 function App() {
+
   return (
     <>
       <CssBaseline />
       <Router>
-        <AuthPage path='/' />
-        <MainApp path = '/home' />
+        {
+          navigator.isOnline ?
+            (firebase.auth().currentUser ?
+              <MainApp path='/' /> :
+              <>
+                <AuthPage path='/' />
+                <MainApp path='/home' />
+              </>) :
+            <MainApp path='/' />
+        }
       </Router>
     </>
   );
