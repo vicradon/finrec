@@ -91,6 +91,28 @@ export default function MainApp() {
       })
     }
   }, []);
+  
+  const stuff = {
+    "initialCash": 0,
+    "today": {
+      "totalIncome": 0,
+      "totalExpense": -500
+    },
+    "cummulative": {
+      "totalIncome": 0,
+      "totalExpense": -500
+    },
+    "days": {
+      "Wed Jan 15 2020": [
+        { "name": "Wednesday stuff", "amount": "150", "type": "Expense", "time": "2020-01-16T18:52:55.716Z", "tableData": { "id": 0 } },
+        { "name": "more stuff", "amount": "100", "type": "Expense", "time": "2020-01-16T16:54:18.674Z", "tableData": { "id": 1 } }
+      ],
+      "Thu Jan 16 2020": [
+        { "name": "stuff", "amount": "200", "type": "Expense", "time": "2020-01-16T18:52:55.716Z", "tableData": { "id": 0 } },
+        { "name": "more stuff", "amount": "300", "type": "Expense", "time": "2020-01-16T16:54:18.674Z", "tableData": { "id": 1 } }
+      ]
+    }
+  }
 
   function dateToUse() {
     const monthVal = { 'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'June': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12 }
@@ -179,6 +201,11 @@ export default function MainApp() {
   const [value, setValue] = React.useState(0);
   const initials = displayName.split(' ').map(x => x[0]).join('');
 
+  function currentDayInState() {
+    const keys = Object.keys(allData.days)
+    return allData.days[keys[keys.length - 1]];
+  }
+
   return (
 
     <div className={classes.container}>
@@ -195,7 +222,7 @@ export default function MainApp() {
           <div className={classes.content} />
           <TodaysFinances
             toLevel1Store={toLevel1Store}
-            initialData={allData.days[dateToUse()]}
+            initialData={currentDayInState()}
           />
         </TabPanel>
 
