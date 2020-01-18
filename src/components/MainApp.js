@@ -222,7 +222,7 @@ export default function MainApp() {
         }
       </div>
       <div>
-        <TabPanel value={value} index={3}>
+        <TabPanel value={value} index={0}>
           <div className={classes.content} />
           <TodaysFinances
             toLevel1Store={toLevel1Store}
@@ -245,7 +245,7 @@ export default function MainApp() {
           <Settings initialCash={allData.initialCash} setInitialCash={setInitialCash} />
         </TabPanel>
        
-        <TabPanel value={value} index={0}>
+        <TabPanel value={value} index={3}>
           <div className={classes.content} />
           <Charts days = {allData.days} />
         </TabPanel>

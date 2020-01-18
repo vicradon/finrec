@@ -24,7 +24,7 @@ export default function Charts({ days }) {
   console.log(last7Days)
   return (
     <div>
-      <h1>Hello</h1>
+      <h3>Last 7 Days</h3>
       <RenderLineChart data = {last7Days} />
     </div>
   )
