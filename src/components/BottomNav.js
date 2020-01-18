@@ -3,12 +3,13 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import TodayIcon from '@material-ui/icons/Today';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
+import TimelineIcon from '@material-ui/icons/Timeline';
 import { AccountDetails } from './svgIcons/icons';
 
 export default function BottomNav({ value, setValue, stickToBottom }) {
   return (
     <BottomNavigation
-      showLabels
+      // showLabels
       value={value}
       onChange={(event, newValue) => {
         setValue(newValue);
@@ -19,6 +20,7 @@ export default function BottomNav({ value, setValue, stickToBottom }) {
       <BottomNavigationAction label="Today" icon={<TodayIcon />} />
       <BottomNavigationAction label="Summary" icon={<AccountDetails />} />
       <BottomNavigationAction label="Settings" icon={<SettingsApplicationsIcon />} />
+      <BottomNavigationAction label="Charts" icon={<TimelineIcon />} />
     </BottomNavigation>
   )
 }

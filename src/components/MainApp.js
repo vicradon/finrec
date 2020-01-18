@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { deepPurple } from '@material-ui/core/colors';
 import SummaryTable from './SummaryTable';
 import Settings from './Settings';
+import Charts from './charts/Charts'
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -242,6 +243,11 @@ export default function MainApp() {
         <TabPanel value={value} index={2}>
           <div className={classes.content} />
           <Settings initialCash={allData.initialCash} setInitialCash={setInitialCash} />
+        </TabPanel>
+       
+        <TabPanel value={value} index={3}>
+          <div className={classes.content} />
+          <Charts />
         </TabPanel>
 
         <BottomNav value={value} setValue={setValue} stickToBottom={classes.stickToBottom} />
