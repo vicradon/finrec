@@ -62,6 +62,7 @@ export default function MainApp() {
     photoURL = '';
     uid = '';
   }
+
   let initialState = {
     initialCash: 0,
     today: {
@@ -86,7 +87,7 @@ export default function MainApp() {
 
   if (localStorage.getItem('finrec-userdata')) {
     let unstableState = JSON.parse(localStorage.getItem('finrec-userdata'));
-    if (`${new Date().getUTCMonth() + 1}${new Date().getUTCDate()}${new Date().getUTCDay()}` !== checkMostRecentDay(unstableState)) {
+    if (+`${new Date().getUTCMonth() + 1}${new Date().getUTCDate()}${new Date().getUTCDay()}` !== checkMostRecentDay(unstableState)) {
       initialState = {
         ...unstableState,
         days: {
@@ -97,6 +98,12 @@ export default function MainApp() {
     } else {
       initialState = unstableState;
     }
+  } else if (firebase.firestore().collection('users').doc(uid)
+    .get()) {
+    firebase.firestore().collection('users').doc(uid)
+      .get().then(res => {
+        initialState = res.data().allData;
+      })
   }
 
 
