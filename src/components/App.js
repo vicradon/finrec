@@ -12,16 +12,8 @@ function App() {
     <>
       <CssBaseline />
       <Router>
-        {
-          navigator.isOnline ?
-            (firebase.auth().currentUser ?
-              <MainApp path='/' /> :
-              <>
-                <AuthPage path='/' />
-                <MainApp path='/home' />
-              </>) :
-            <MainApp path='/' />
-        }
+        <AuthPage path='/' />
+        <MainApp path = '/home' />
       </Router>
     </>
   );

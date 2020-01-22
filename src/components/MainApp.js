@@ -99,12 +99,6 @@ export default function MainApp() {
     } else {
       initialState = unstableState;
     }
-  } else if (firebase.firestore().collection('users').doc(uid)
-    .get()) {
-    firebase.firestore().collection('users').doc(uid)
-      .get().then(res => {
-        initialState = res.data().allData;
-      })
   }
 
 
