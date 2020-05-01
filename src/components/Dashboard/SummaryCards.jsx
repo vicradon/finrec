@@ -1,16 +1,21 @@
 import React from "react";
-import { Flex, Text } from "@chakra-ui/core";
-
+import { Flex, Text, useColorMode } from "@chakra-ui/core";
 
 const InfoCard = ({ name, value, color }) => {
-  //
+  const { colorMode } = useColorMode();
+
+  const myBgColor = {
+    light: "#fff",
+    dark: "gray.600",
+  };
+
   return (
     <Flex
       padding="1rem 0"
       w="270px"
       align="center"
       rounded="lg"
-      bg="white"
+      bg={myBgColor[colorMode]}
       direction="column"
     >
       <Text color={color} fontSize="24px">
@@ -32,4 +37,4 @@ const SummaryCards = () => {
   );
 };
 
-export default SummaryCards
+export default SummaryCards;

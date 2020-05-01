@@ -7,6 +7,7 @@ import {
   Flex,
   Text,
   useColorMode,
+  LightMode,
 } from "@chakra-ui/core";
 import { FaWallet } from "react-icons/fa";
 import { Link } from "@reach/router";
@@ -19,12 +20,14 @@ const AsideNav = () => {
       position="fixed"
       gridTemplateRows="1fr 4fr 4fr 3fr"
     >
-      <Flex bg="gray.500" justify="space-evenly" align="center">
-        <Avatar size="sm" name="F R" />
-        <Text color="white" fontSize="2xl">
-          FinRec
-        </Text>
-      </Flex>
+      <LightMode>
+        <Flex bg="gray.600" justify="space-evenly" align="center">
+          <Avatar size="sm" name="F R" />
+          <Text color="white" fontSize="2xl">
+            FinRec
+          </Text>
+        </Flex>
+      </LightMode>
       <Flex
         direction="column"
         justifyContent="space-evenly"
@@ -95,9 +98,9 @@ const Layout = ({ children }) => {
   const { colorMode } = useColorMode();
 
   const myBgColor = {
-    light: "brandBackground",
-    dark: "#1a202c"
-  }
+    light: "#eef4f8",
+    dark: "#1a202c",
+  };
 
   window.addEventListener("resize", (e) => setWidth(e.target.innerWidth));
 
