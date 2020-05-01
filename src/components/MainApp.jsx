@@ -104,6 +104,7 @@ export default function MainApp() {
 
   const [allData, setAllData] = useState(initialState);
 
+  /*
   const stuff = {
     "initialCash": 0,
     "today": {
@@ -125,6 +126,7 @@ export default function MainApp() {
       ]
     }
   }
+  */
 
   function setInitialCash(value) {
     setAllData(prevData => {
@@ -206,6 +208,10 @@ export default function MainApp() {
   }
 
   return (
+    <div>
+      Stuff
+    </div>
+    /*
     <div className={classes.container}>
       <div className={classes.user}>
         <h3>{displayName}</h3>
@@ -248,5 +254,6 @@ export default function MainApp() {
 
       </div>
     </div>
+    */
   )
 }

@@ -24,3 +24,5 @@ yarn-error.log*
 
 #Obsolte
 obsolete_stuff
+
+.env
