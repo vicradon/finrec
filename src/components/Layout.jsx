@@ -1,9 +1,15 @@
 import React from "react";
-import { Button, Avatar, Box, Grid, Flex, Text, Icon } from "@chakra-ui/core";
+import { Button, Avatar, Box, Grid, Flex, Text } from "@chakra-ui/core";
+import { FaWallet } from "react-icons/fa";
 
 const AsideNav = () => {
   return (
-    <Grid gridTemplateRows="1fr 4fr 4fr 3fr">
+    <Grid
+      height="100vh"
+      width="200px"
+      position="fixed"
+      gridTemplateRows="1fr 4fr 4fr 3fr"
+    >
       <Flex bg="#00000009" justify="space-evenly" align="center">
         <Avatar size="sm" name="F R" />
         <Text fontSize="2xl">FinRec</Text>
@@ -17,15 +23,15 @@ const AsideNav = () => {
         <Avatar size="lg" name="Default User" />
         <Text fontSize="lg">Default User</Text>
         <Box display="flex" border={1} borderRadius={10} className="balance">
-          <Icon name="wallet" />
-          <Flex justify = "center" alignItems = "center">
+          <Box as={FaWallet}></Box>
+          <Flex justify="center" alignItems="center">
             <Text currencyType></Text>
             <Text>3000</Text>
           </Flex>
-          <hr/>
+          <hr />
         </Box>
       </Flex>
-      <Flex align = "center" justify = "space-around" direction="column">
+      <Flex align="center" justify="space-around" direction="column">
         <Button className="go-to-dashboard">Dashboard</Button>
         <Button className="go-to-transactions">Transactions</Button>
         <Button className="go-to-profile">Profile</Button>
@@ -59,10 +65,10 @@ const DemoChildren = () => {
 
 const Layout = ({ children }) => {
   return (
-    <Grid minH="100vh" templateColumns="1.5fr 10.5fr" gap={5}>
+    <div>
       <AsideNav />
-      <DemoChildren />
-    </Grid>
+      <Box marginLeft="200px">{children}</Box>
+    </div>
   );
 };
 
