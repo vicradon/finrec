@@ -1,21 +1,13 @@
 import React from 'react';
-import "../css/firebase-ui-auth.css";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Router } from '@reach/router';
-import AuthPage from './authPage';
-import MainApp from './MainApp.jsx';
 
 function App() {
-  const [authenticated] = React.useState(true);
   return (
     <>
       <CssBaseline />
       <Router>
-        {
-          authenticated ?
-            <MainApp path='/home' /> :
-            <AuthPage path='/' />
-        }
+
       </Router>
     </>
   );
