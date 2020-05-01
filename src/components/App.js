@@ -1,20 +1,19 @@
 import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { Router } from '@reach/router';
 import Layout from './Layout';
-
+import { ThemeProvider, CSSReset } from "@chakra-ui/core";
+import customTheme from '../utils/theme';
 
 function App() {
   return (
-    <>
-      <CssBaseline />
-      <Layout classM>
+    <ThemeProvider theme={customTheme}>
+      <CSSReset />
+      <Layout>
         <Router>
 
         </Router>
       </Layout>
-
-    </>
+    </ThemeProvider>
   );
 }
 

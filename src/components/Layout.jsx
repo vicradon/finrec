@@ -1,47 +1,37 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import { Box, Avatar } from "@material-ui/core";
-import { AccountBalance } from "@material-ui/icons";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "grid",
-    gridTemplateColumns: "2fr 10fr",
-    minHeight: "100vh",
-  },
-  aside: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-  },
-}));
+import { Button, Avatar, Box, Grid, Flex, Text, Icon } from "@chakra-ui/core";
 
 const AsideNav = () => {
-  const cs = useStyles();
   return (
-    <div className={cs.aside}>
-      <h1>FinRec</h1>
-      <div className="userdetails">
-        <Avatar className={cs.large}>DU</Avatar>
-        <p>Default User</p>
-        <Box display="flex" border={1} borderRadius = {10} className="balance">
-          <AccountBalance />
+    <Grid gridTemplateRows="1fr 4fr 4fr 3fr">
+      <Flex bg="#00000009" justify="space-evenly" align="center">
+        <Avatar size="sm" name="F R" />
+        <Text fontSize="2xl">FinRec</Text>
+      </Flex>
+      <Flex
+        direction="column"
+        justifyContent="space-evenly"
+        align="center"
+        className="userdetails"
+      >
+        <Avatar size="lg" name="Default User" />
+        <Text fontSize="lg">Default User</Text>
+        <Box display="flex" border={1} borderRadius={10} className="balance">
+          <Icon name="wallet" />
+          <Flex justify = "center" alignItems = "center">
+            <Text currencyType></Text>
+            <Text>3000</Text>
+          </Flex>
+          <hr/>
         </Box>
-        <div className="current-balance"></div>
-      </div>
-      <hr />
-      <Box display="flex" flexDirection="column" className="nav-buttons">
+      </Flex>
+      <Flex align = "center" justify = "space-around" direction="column">
         <Button className="go-to-dashboard">Dashboard</Button>
         <Button className="go-to-transactions">Transactions</Button>
         <Button className="go-to-profile">Profile</Button>
         <Button className="go-to-about">About</Button>
-      </Box>
-    </div>
+      </Flex>
+    </Grid>
   );
 };
 
@@ -68,12 +58,11 @@ const DemoChildren = () => {
 };
 
 const Layout = ({ children }) => {
-  const cs = useStyles();
   return (
-    <div className={cs.root}>
+    <Grid minH="100vh" templateColumns="1.5fr 10.5fr" gap={5}>
       <AsideNav />
       <DemoChildren />
-    </div>
+    </Grid>
   );
 };
 
