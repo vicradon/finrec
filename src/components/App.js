@@ -1,14 +1,19 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Router } from '@reach/router';
+import Layout from './Layout';
+
 
 function App() {
   return (
     <>
       <CssBaseline />
-      <Router>
+      <Layout classM>
+        <Router>
 
-      </Router>
+        </Router>
+      </Layout>
+
     </>
   );
 }
