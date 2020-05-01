@@ -4,7 +4,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { Router } from '@reach/router';
 import AuthPage from './authPage';
 import MainApp from './MainApp.jsx';
-// import firebase from 'firebase/app';
 
 function App() {
   const [authenticated] = React.useState(true);
