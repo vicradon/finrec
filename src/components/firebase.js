@@ -2,13 +2,7 @@ import * as firebaseui from 'firebaseui'
 import firebase from 'firebase/app'
 
 const config = ({
-  apiKey: "AIzaSyBd-hUfFtpSFOnixn2EpObNc8686Pi277A",
-  authDomain: "medcare-1a.firebaseapp.com",
-  databaseURL: "https://medcare-1a.firebaseio.com",
-  projectId: "medcare-1a",
-  storageBucket: "medcare-1a.appspot.com",
-  messagingSenderId: "520499962764",
-  appId: "1:520499962764:web:2f6285cce9986c1f"
+  
 })
 
 
