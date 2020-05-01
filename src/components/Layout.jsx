@@ -1,6 +1,15 @@
 import React from "react";
-import { Button, Avatar, Box, Grid, Flex, Text } from "@chakra-ui/core";
+import {
+  Button,
+  Avatar,
+  Box,
+  Grid,
+  Flex,
+  Text,
+  useColorMode,
+} from "@chakra-ui/core";
 import { FaWallet } from "react-icons/fa";
+import { Link } from "@reach/router";
 
 const AsideNav = () => {
   return (
@@ -10,9 +19,11 @@ const AsideNav = () => {
       position="fixed"
       gridTemplateRows="1fr 4fr 4fr 3fr"
     >
-      <Flex bg="#00000009" justify="space-evenly" align="center">
+      <Flex bg="gray.500" justify="space-evenly" align="center">
         <Avatar size="sm" name="F R" />
-        <Text fontSize="2xl">FinRec</Text>
+        <Text color="white" fontSize="2xl">
+          FinRec
+        </Text>
       </Flex>
       <Flex
         direction="column"
@@ -32,12 +43,28 @@ const AsideNav = () => {
         </Box>
       </Flex>
       <Flex align="center" justify="space-around" direction="column">
-        <Button className="go-to-dashboard">Dashboard</Button>
-        <Button className="go-to-transactions">Transactions</Button>
-        <Button className="go-to-profile">Profile</Button>
-        <Button className="go-to-about">About</Button>
+        <Link to="/">
+          <Button className="go-to-dashboard">Dashboard</Button>
+        </Link>
+        <Link to="/transactions">
+          <Button className="go-to-transactions">Transactions</Button>
+        </Link>
+        <Link to="/settings">
+          <Button className="go-to-profile">Settings</Button>
+        </Link>
+        <Link to="/about">
+          <Button className="go-to-about">About</Button>
+        </Link>
       </Flex>
     </Grid>
+  );
+};
+
+const NavBar = () => {
+  return (
+    <Box bg="gray.600" color="white">
+      <Text>FinRec</Text>
+    </Box>
   );
 };
 
@@ -64,10 +91,38 @@ const DemoChildren = () => {
 };
 
 const Layout = ({ children }) => {
+  const [width, setWidth] = React.useState(window.innerWidth);
+  const { colorMode } = useColorMode();
+
+  const myBgColor = {
+    light: "brandBackground",
+    dark: "#1a202c"
+  }
+
+  window.addEventListener("resize", (e) => setWidth(e.target.innerWidth));
+
   return (
     <div>
-      <AsideNav />
-      <Box marginLeft="200px">{children}</Box>
+      {width < 768 ? (
+        <>
+          <NavBar />
+          <Box background={myBgColor[colorMode]} padding="1rem">
+            {children}
+          </Box>
+        </>
+      ) : (
+        <>
+          <AsideNav />
+          <Box
+            background={myBgColor[colorMode]}
+            height="100%"
+            marginLeft="200px"
+            padding="1rem"
+          >
+            {children}
+          </Box>
+        </>
+      )}
     </div>
   );
 };

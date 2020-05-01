@@ -1,23 +1,27 @@
 import React from 'react';
 import { Router } from '@reach/router';
 import Layout from './Layout';
-import Dashboard from './Dashboard';
+import Dashboard from './Dashboard/Dashboard';
 import About from './About';
+import Settings from './Settings';
 import NotFound from './NotFound';
-import { ThemeProvider, CSSReset } from "@chakra-ui/core";
+import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
 import customTheme from '../utils/theme';
 
 function App() {
   return (
     <ThemeProvider theme={customTheme}>
-      <CSSReset />
-      <Layout>
-        <Router>
-          <Dashboard path="/" />
-          <About path="/about" />
-          <NotFound default />
-        </Router>
-      </Layout>
+      <ColorModeProvider>
+        <CSSReset />
+        <Layout>
+          <Router>
+            <Dashboard path="/" />
+            <About path="/about" />
+            <Settings path="/settings" />
+            <NotFound default />
+          </Router>
+        </Layout>
+      </ColorModeProvider>
     </ThemeProvider>
   );
 }
