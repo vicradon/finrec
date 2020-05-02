@@ -1,14 +1,6 @@
-Active:
-- Test the app
-- Convert avatar to base64 image
-- Build a nested table based on weeks
-- But some form of settings in the charts area
-- For now, just render the last 7 days
+Create the responsive table component
+  - Have filtering and select all in mind
+Add Charts which respond to data changes
+Add authentication and database integration. Prolly use FaunaDB
+Add local storage sync
 
-Archive:
-- Create a buffer which loads up data and sends it to firestore when fiiled @done
-- Fix the bug of the buffer increment increasing twice @done
-- Communicate with the store about data changes in the table @done
-- Changes are automatically sent to store which then sends data to the weeks's data object @done
-- After the day ends, clear the data in the day's table @done
-- Handle auth persistence @done

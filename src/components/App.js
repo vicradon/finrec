@@ -7,22 +7,29 @@ import Settings from './Settings';
 import NotFound from './NotFound';
 import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
 import customTheme from '../utils/theme';
+import StoreProvider from '../state/Store'
 
 function App() {
+  const MainApp = () => (
+    <Layout>
+      <Router>
+        <Dashboard path="/" />
+        <About path="/about" />
+        <Settings path="/settings" />
+        <NotFound default />
+      </Router>
+    </Layout>
+  )
+
   return (
-    <ThemeProvider theme={customTheme}>
-      <ColorModeProvider>
-        <CSSReset />
-        <Layout>
-          <Router>
-            <Dashboard path="/" />
-            <About path="/about" />
-            <Settings path="/settings" />
-            <NotFound default />
-          </Router>
-        </Layout>
-      </ColorModeProvider>
-    </ThemeProvider>
+    <StoreProvider>
+      <ThemeProvider theme={customTheme}>
+        <ColorModeProvider>
+          <CSSReset />
+          <MainApp />
+        </ColorModeProvider>
+      </ThemeProvider>
+    </StoreProvider>
   );
 }
 
