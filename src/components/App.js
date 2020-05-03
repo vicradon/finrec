@@ -1,23 +1,32 @@
 import React from 'react';
-import "../css/firebase-ui-auth.css";
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { Router } from '@reach/router';
-import AuthPage from './authPage';
-import MainApp from './MainApp.jsx';
+import Layout from './Layout/index';
+import Dashboard from './Dashboard/Dashboard';
+import About from './About';
+import Settings from './Settings';
+import NotFound from './NotFound';
+import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
+import customTheme from '../utils/theme';
 
 function App() {
-  const [authenticated] = React.useState(true);
-  return (
-    <>
-      <CssBaseline />
+  const MainApp = () => (
+    <Layout>
       <Router>
-        {
-          authenticated ?
-            <MainApp path='/home' /> :
-            <AuthPage path='/' />
-        }
+        <Dashboard path="/" />
+        <About path="/about" />
+        <Settings path="/settings" />
+        <NotFound default />
       </Router>
-    </>
+    </Layout>
+  )
+
+  return (
+    <ThemeProvider theme={customTheme}>
+      <ColorModeProvider>
+        <CSSReset />
+        <MainApp />
+      </ColorModeProvider>
+    </ThemeProvider>
   );
 }
 
