@@ -1,12 +1,14 @@
 import React from "react";
-import { Button, useColorMode } from "@chakra-ui/core";
+import { Button, useColorMode, Flex, Text } from "@chakra-ui/core";
 
 const About = () => {
   const { toggleColorMode } = useColorMode();
   return (
     <div>
-      <h1>Seeting</h1>
-      <Button onClick = {toggleColorMode}>Toggle mode</Button>
+      <Text>Settings</Text>
+      <Text >Appearance</Text>
+      <Button bg = "#5f8af8" onClick = {toggleColorMode}>Toggle mode</Button>
+      <Flex height = "80vh"></Flex>
     </div>
   );
 };

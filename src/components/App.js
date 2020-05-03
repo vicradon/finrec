@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router } from '@reach/router';
-import Layout from './Layout';
+import Layout from './Layout/index';
 import Dashboard from './Dashboard/Dashboard';
 import About from './About';
 import Settings from './Settings';
