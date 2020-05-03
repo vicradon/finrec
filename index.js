@@ -76,7 +76,7 @@ const generateRandomData = (length) => {
 
 class randomData {
   constructor(filters) {
-    const { length, dateRange, categories, cashFlow, paymentMode, amount } = filters
+    const { length, dateRange, categories, cashFlow, paymentMode, amount, description } = filters
     this._data = generateRandomData(length);
     this._filteredData = this._data
     this._dateRange = dateRange
@@ -84,105 +84,151 @@ class randomData {
     this._cashFlow = cashFlow
     this._paymentMode = paymentMode
     this._amount = amount
+    this._description = description
     this._tens = []
+    this.filterData()
+  }
+  filterFunction = (field, dataPointField) => {
+    if (field && field.length > 0) {
+      this._filteredData = this._filteredData.filter((x) => {
+        if (field.includes(x[`${dataPointField}`])) {
+          return x
+        }
+        return false
+      })
+    }
+    return this._filteredData
   }
   dateFilter = () => {
-    if (this._dateRange) {
+    if (this._dateRange.min && this._dateRange.max) {
       const _minDate = new Date(this._dateRange.min)
       const _maxDate = new Date(this._dateRange.max)
 
       this._filteredData = this._filteredData.filter((x) => {
         const theDate = new Date(x.date)
-        if (theDate >= _minDate && theDate < _maxDate) {
+        if (theDate >= _minDate && theDate <= _maxDate) {
           return x
         }
         return false
       })
     }
   }
-  categoriesFilter = () => {
-    if (this._categories.length > 0) {
-      this._filteredData = this._filteredData.filter((x) => {
-        if (this._categories.includes(x.category)) {
-          return x
-        }
-        return false
-      })
-    }
-    return this._filteredData
-  }
 
-  cashFlowFilter = () => {
-    if (this._cashFlow.length > 0) {
-      this._filteredData = this._filteredData.filter((x) => {
-        if (this._cashFlow.includes(x.cashFlow)) {
-          return x
-        }
-        return false
-      })
-    }
-    return this._filteredData
-
-  }
-  paymentModeFilter = () => {
-
-  }
   amountFilter = () => {
+    if (this._amount.min && this._amount.max) {
+      const _min = this._amount.min
+      const _max = this._amount.max
 
+      this._filteredData = this._filteredData.filter((x) => {
+        const _amount = x.amount
+        if (_amount >= _min && _amount <= _max) {
+          return x
+        }
+        return false
+      })
+    }
   }
+
   descriptionFilter = () => {
+    if (this._description && this._description.length > 0) {
+      const descriptionArr = this._description.split(' ')
 
+      this._filteredData = this._filteredData.filter((x) => {
+        const itemDescriptionArr = x.description.split(' ')
+
+        const itemInQuery = itemDescriptionArr.filter((x) =>  descriptionArr.includes(x)).length
+        if (itemInQuery > 0) {
+          return x
+        }
+        return false
+      })
+    }
+    return this._filteredData
   }
-  breakIntoTens = () => {
-    // this.dateFilter()
-    // this.categoriesFilter()
-    this.cashFlowFilter()
-    this.paymentModeFilter()
+
+  filterData = () => {
+    this.dateFilter()
+    this.filterFunction(this._categories, 'category')
+    this.filterFunction(this._cashFlow, 'cashFlow')
+    this.filterFunction(this._paymentMode, 'paymentMode')
     this.amountFilter()
     this.descriptionFilter()
-
-    for (let i = 0; i < this._data.length; i += 10) {
+  }
+  breakIntoTens = () => {
+    for (let i = 0; i < this._filteredData.length; i += 10) {
       this._tens.push(this._filteredData.slice(i, i + 10))
     }
   }
-  get tens() { return this._tens }
-
-  /**
-   * Structure
-   * We have one big data object gotten from an API or localStorage
-   * This data would be sorted right from start
-   * Anytime a filter is clicked we generate data based on that filter and return it
-   * We always displlay filtered data
-   * This data would be available at the top component level so that any component can access it as it wishes
-   * The Table component would highly depend on filters
-   * Other components would depend on user defined filters
-   * 
-   * Filters
-   * 
-   * Default: no-filter
-   * 
-   * Return tens of the filtered data
-   * 
-   * 
-   * Sorting
-   * 
-   * sort based on cash from max to min
-   */
-
-
+  get tens() {
+    this.breakIntoTens()
+    return this._tens
+  }
+  get data() {
+    return this._filteredData
+  }
 }
-// Ideally: dashboardData = new DataObject()
 
 const someRandomData = new randomData({
-  length: 20,
+  length: 50000,
   dateRange: { min: '2/20/2020', max: '5/20/2020' },
   categories: ['clothing', 'housing'],
-  cashFlow: ['income', ]
+  cashFlow: ['income',],
+  paymentMode: ['cash'],
+  amount: { min: 500, max: 1000 },
+  description: "bought this"
 });
 
-someRandomData.breakIntoTens()
-const firstGuy = someRandomData.tens[0][0]
-console.log(someRandomData.tens)
+// const firstGuy = someRandomData.tens[0][0]
+
+console.log(someRandomData.data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Ideally: dashboardData = new DataObject()
+/**
+ * Structure
+ * We have one big data object gotten from an API or localStorage
+ * This data would be sorted right from start
+ * Anytime a filter is clicked we generate data based on that filter and return it
+ * We always displlay filtered data
+ * This data would be available at the top component level so that any component can access it as it wishes
+ * The Table component would highly depend on filters
+ * Other components would depend on user defined filters
+ *
+ * Filters
+ *
+ * Default: no-filter
+ *
+ * Return tens of the filtered data
+ *
+ *
+ * Sorting
+ *
+ * sort based on cash from max to min
+ */
+
+
 
 /**
  * The table would take the whole data
