@@ -29,8 +29,6 @@ const Dashboard = ({ state, repaintUI, countPlus }) => {
         <Text>{stuff.description}</Text>
         <button
           onClick={() => {
-            console.log(stuff);
-            
             stuff.setDescription("blah blah");
             repaintUI();
           }}

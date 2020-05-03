@@ -100,7 +100,7 @@ class randomData {
     return this._filteredData
   }
   dateFilter = () => {
-    if (this._dateRange.min && this._dateRange.max) {
+    if (this._dateRange && this._dateRange.min && this._dateRange.max) {
       const _minDate = new Date(this._dateRange.min)
       const _maxDate = new Date(this._dateRange.max)
 
@@ -115,7 +115,7 @@ class randomData {
   }
 
   amountFilter = () => {
-    if (this._amount.min && this._amount.max) {
+    if (this._amount && this._amount.min && this._amount.max) {
       const _min = this._amount.min
       const _max = this._amount.max
 
@@ -169,18 +169,19 @@ class randomData {
 }
 
 const someRandomData = new randomData({
-  length: 50000,
-  dateRange: { min: '2/20/2020', max: '5/20/2020' },
-  categories: ['clothing', 'housing'],
-  cashFlow: ['income',],
-  paymentMode: ['cash'],
-  amount: { min: 500, max: 1000 },
-  description: "bought this"
+  length: 20,
+  // dateRange: { min: '2/20/2020', max: '5/20/2020' },
+  // categories: ['clothing', 'housing'],
+  // cashFlow: ['income',],
+  // paymentMode: ['cash'],
+  // amount: { min: 500, max: 1000 },
+  // description: "bought this"
 });
 
 // const firstGuy = someRandomData.tens[0][0]
 
 console.log(someRandomData.data)
+console.log(someRandomData.tens)
 
 
 

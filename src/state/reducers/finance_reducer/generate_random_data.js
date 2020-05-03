@@ -5,6 +5,7 @@ const generateRandomData = (length) => {
   const categories = ["food", "transport", "housing", "education", "clothing"]
   const paymentModes = ['credit card', 'debit card', 'cash']
   const descriptions = ["bought this and that", "sold this for that", "reported a blind man", "met a thief"]
+  const cashFlows = ['income', 'expense']
 
   const randomDate = (start, end) => {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -22,14 +23,15 @@ const generateRandomData = (length) => {
   }
 
   for (let i = 0; i < length; i++) {
-    const aDataPoint = new dataPoint(
-      categories[getRandomIndex(categories)],
-      getRandomDate(),
-      paymentModes[getRandomIndex(paymentModes)],
-      descriptions[getRandomIndex(descriptions)],
-      getRandomAmount(200, 5000),
-      false
-    )
+    const aDataPoint = new dataPoint({
+      category: categories[getRandomIndex(categories)],
+      date: getRandomDate(),
+      paymentMode: paymentModes[getRandomIndex(paymentModes)],
+      description: descriptions[getRandomIndex(descriptions)],
+      amount: getRandomAmount(200, 5000),
+      isChecked: false,
+      cashFlow: cashFlows[getRandomIndex(cashFlows)]
+    })
     data.push(aDataPoint)
   }
   return data.sort((a, b) => {
@@ -37,5 +39,4 @@ const generateRandomData = (length) => {
     return -1
   })
 }
-
 export default generateRandomData
