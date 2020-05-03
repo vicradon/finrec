@@ -26,3 +26,11 @@ yarn-error.log*
 obsolete_stuff
 
 .env
+
+edgeCases.yml
+archive.md
+index.js
+requirements.md
+todo
+errors.md
+index.html
