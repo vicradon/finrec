@@ -7,7 +7,6 @@ import Settings from './Settings';
 import NotFound from './NotFound';
 import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
 import customTheme from '../utils/theme';
-import StoreProvider from '../state/Store'
 
 function App() {
   const MainApp = () => (
@@ -22,14 +21,12 @@ function App() {
   )
 
   return (
-    <StoreProvider>
-      <ThemeProvider theme={customTheme}>
-        <ColorModeProvider>
-          <CSSReset />
-          <MainApp />
-        </ColorModeProvider>
-      </ThemeProvider>
-    </StoreProvider>
+    <ThemeProvider theme={customTheme}>
+      <ColorModeProvider>
+        <CSSReset />
+        <MainApp />
+      </ColorModeProvider>
+    </ThemeProvider>
   );
 }
 

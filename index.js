@@ -1,12 +1,14 @@
 // @ts-check
 class dataPoint {
-  constructor(category, date, paymentMode, description, amount, isChecked) {
+  constructor(options) {
+    const { category, date, paymentMode, description, amount, isChecked, cashFlow } = options
     this.category = category
     this.date = date
     this.paymentMode = paymentMode
     this.description = description
     this.amount = amount
     this.isChecked = isChecked
+    this.cashFlow = cashFlow
   }
   toggleCheck = () => {
     this.isChecked = !this.isChecked
@@ -36,6 +38,7 @@ const generateRandomData = (length) => {
   const categories = ["food", "transport", "housing", "education", "clothing"]
   const paymentModes = ['credit card', 'debit card', 'cash']
   const descriptions = ["bought this and that", "sold this for that", "reported a blind man", "met a thief"]
+  const cashFlows = ['income', 'expense']
 
   const randomDate = (start, end) => {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -53,14 +56,15 @@ const generateRandomData = (length) => {
   }
 
   for (let i = 0; i < length; i++) {
-    const aDataPoint = new dataPoint(
-      categories[getRandomIndex(categories)],
-      getRandomDate(),
-      paymentModes[getRandomIndex(paymentModes)],
-      descriptions[getRandomIndex(descriptions)],
-      getRandomAmount(200, 5000),
-      false
-    )
+    const aDataPoint = new dataPoint({
+      category: categories[getRandomIndex(categories)],
+      date: getRandomDate(),
+      paymentMode: paymentModes[getRandomIndex(paymentModes)],
+      description: descriptions[getRandomIndex(descriptions)],
+      amount: getRandomAmount(200, 5000),
+      isChecked: false,
+      cashFlow: cashFlows[getRandomIndex(cashFlows)]
+    })
     data.push(aDataPoint)
   }
   return data.sort((a, b) => {
@@ -71,30 +75,87 @@ const generateRandomData = (length) => {
 // export default generateRandomData
 
 class randomData {
-  constructor(length, dateRange, category, cashflow, paymentMode, amount) {
+  constructor(filters) {
+    const { length, dateRange, categories, cashFlow, paymentMode, amount } = filters
     this._data = generateRandomData(length);
     this._filteredData = this._data
-    this.dateRange = dateRange
-    this.tens = []
+    this._dateRange = dateRange
+    this._categories = categories
+    this._cashFlow = cashFlow
+    this._paymentMode = paymentMode
+    this._amount = amount
+    this._tens = []
+  }
+  dateFilter = () => {
+    if (this._dateRange) {
+      const _minDate = new Date(this._dateRange.min)
+      const _maxDate = new Date(this._dateRange.max)
+
+      this._filteredData = this._filteredData.filter((x) => {
+        const theDate = new Date(x.date)
+        if (theDate >= _minDate && theDate < _maxDate) {
+          return x
+        }
+        return false
+      })
+    }
+  }
+  categoriesFilter = () => {
+    if (this._categories.length > 0) {
+      this._filteredData = this._filteredData.filter((x) => {
+        if (this._categories.includes(x.category)) {
+          return x
+        }
+        return false
+      })
+    }
+    return this._filteredData
+  }
+  filterFunction = (field) => {
+    if (field.length > 0) {
+      this._filteredData = this._filteredData.filter((x) => {
+        if (field.includes(x.category)) {
+          return x
+        }
+        return false
+      })
+    }
+    return this._filteredData
+  }
+  cashFlowFilter = () => {
+    if (this._cashFlow.length > 0) {
+      this._filteredData = this._filteredData.filter((x) => {
+        if (this._cashFlow.includes(x.cashFlow)) {
+          return x
+        }
+        return false
+      })
+    }
+    return this._filteredData
+
+  }
+  paymentModeFilter = () => {
+
+  }
+  amountFilter = () => {
+
+  }
+  descriptionFilter = () => {
 
   }
   breakIntoTens = () => {
-    if (this.dateRange) {
-      const _minDate = new Date(this.dateRange.min)
-      const _maxDate = new Date(this.dateRange.max)
-
-      this._filteredData = this._data.filter(x => {
-        const theDate = new Date(x.date)
-        if (theDate >= _minDate && theDate < _maxDate) return x
-      })
-    }
+    // this.dateFilter()
+    // this.categoriesFilter()
+    this.cashFlowFilter()
+    this.paymentModeFilter()
+    this.amountFilter()
+    this.descriptionFilter()
 
     for (let i = 0; i < this._data.length; i += 10) {
-      this.tens.push(this._filteredData.slice(i, i + 10))
+      this._tens.push(this._filteredData.slice(i, i + 10))
     }
   }
-  tens = () => this.tens;
-
+  get tens() { return this._tens }
 
   /**
    * Structure
@@ -108,22 +169,33 @@ class randomData {
    * 
    * Filters
    * 
-   * Have a data
-   * Have filters: Default is no-filter
+   * Default: no-filter
+   * 
    * Return tens of the filtered data
+   * 
+   * 
+   * Sorting
+   * 
+   * sort based on cash from max to min
    */
 
 
 }
-//, 
+// Ideally: dashboardData = new DataObject()
 
-const someRandomData = new randomData(20, { min: '2/20/2020', max: '5/20/2020' });
+const someRandomData = new randomData({
+  length: 20,
+  dateRange: { min: '2/20/2020', max: '5/20/2020' },
+  categories: ['clothing', 'housing'],
+  cashFlow: ['income', 'expense']
+});
+
 someRandomData.breakIntoTens()
 const firstGuy = someRandomData.tens[0][0]
 console.log(someRandomData.tens)
 
 /**
- * The table would taken the whole data
+ * The table would take the whole data
  * It'll then break down the data into tens
  * It'll render the tens in a pagination manner
  * Each dataPoint would have an ID assined from UUID
