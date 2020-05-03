@@ -111,17 +111,7 @@ class randomData {
     }
     return this._filteredData
   }
-  filterFunction = (field) => {
-    if (field.length > 0) {
-      this._filteredData = this._filteredData.filter((x) => {
-        if (field.includes(x.category)) {
-          return x
-        }
-        return false
-      })
-    }
-    return this._filteredData
-  }
+
   cashFlowFilter = () => {
     if (this._cashFlow.length > 0) {
       this._filteredData = this._filteredData.filter((x) => {
@@ -187,7 +177,7 @@ const someRandomData = new randomData({
   length: 20,
   dateRange: { min: '2/20/2020', max: '5/20/2020' },
   categories: ['clothing', 'housing'],
-  cashFlow: ['income', 'expense']
+  cashFlow: ['income', ]
 });
 
 someRandomData.breakIntoTens()
