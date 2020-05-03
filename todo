@@ -1,6 +1,0 @@
-Create the responsive table component
-  - Have filtering and select all in mind
-Add Charts which respond to data changes
-Add authentication and database integration. Prolly use FaunaDB
-Add local storage sync
-

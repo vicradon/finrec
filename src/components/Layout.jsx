@@ -71,28 +71,6 @@ const NavBar = () => {
   );
 };
 
-const DemoChildren = () => {
-  return (
-    <div>
-      <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sunt
-        voluptatum rerum necessitatibus optio, laborum hic. Magni esse nobis
-        voluptatum culpa sapiente necessitatibus reprehenderit beatae doloribus,
-        inventore nulla dolore perspiciatis suscipit molestias laboriosam maxime
-        similique assumenda delectus? Nisi incidunt accusamus, soluta
-        consequuntur perspiciatis maxime quos autem repudiandae. Ullam,
-        inventore. Deserunt distinctio error, explicabo consequatur vel, neque
-        dolorem dolor doloremque sequi reprehenderit ut dolore quae cum et optio
-        modi recusandae consequuntur est perspiciatis provident maxime qui
-        aliquam. Aspernatur consequuntur nam, dolores, minima, atque ullam earum
-        reprehenderit quidem est itaque blanditiis deserunt iusto asperiores?
-        Doloribus reiciendis similique voluptate corrupti repudiandae enim
-        suscipit dolore?
-      </p>
-    </div>
-  );
-};
-
 const Layout = ({ children }) => {
   const [width, setWidth] = React.useState(window.innerWidth);
   const { colorMode } = useColorMode();
