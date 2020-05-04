@@ -6,48 +6,57 @@ import {
   Flex,
   Text,
   LightMode,
-  CloseButton
+  CloseButton,
 } from "@chakra-ui/core";
-
-import { FaWallet } from "react-icons/fa";
 import { Link } from "@reach/router";
+import { FaWallet } from "react-icons/fa";
 
-
-const Aside = ({width, closeButton, onClose}) => {
+const Aside = ({ width, closeButton, onClose }) => {
   return (
-    <Box overflow = "auto" width={width || "200px"} position="fixed" height="100vh">
+    <Box
+      overflow="auto"
+      width={width || "200px"}
+      position="fixed"
+      height="100vh"
+    >
       <LightMode>
         <Flex height="60px" bg="gray.600" justify="space-evenly" align="center">
           <Avatar size="sm" name="F R" />
           <Text color="white" fontSize="2xl">
             FinRec
           </Text>
-          {
-            closeButton ?
-            <CloseButton onClick = {onClose}  />: ''
-          }
+          {closeButton ? <CloseButton onClick={onClose} /> : ""}
         </Flex>
       </LightMode>
 
-      <Flex
-        direction="column"
-        justifyContent="space-evenly"
-        align="center"
-        height="200px"
-        margin = "2rem 0"
-      >
-        <Avatar size="xl" name="Default User" />
-        <Text fontSize="lg">Default User</Text>
-        <Box alignItems = "center" width = "80px" justifyContent = "space-around" display="flex" border={1} borderRadius={10} className="balance">
-          <Box as={FaWallet}></Box>
-          <Flex justifyContent="center" alignItems="center">
-            <Text currencyType>N</Text>
-            <Text>3000</Text>
-          </Flex>
-          <hr />
-        </Box>
-      </Flex>
-
+      <Link to = "/user-profile">
+        <Flex
+          direction="column"
+          justifyContent="space-evenly"
+          align="center"
+          height="200px"
+          margin="2rem 0"
+        >
+          <Avatar size="xl" name="Default User" />
+          <Text fontSize="lg">Default User</Text>
+          <Box
+            alignItems="center"
+            width="80px"
+            justifyContent="space-around"
+            display="flex"
+            border={1}
+            borderRadius={10}
+            className="balance"
+          >
+            <Box as={FaWallet}></Box>
+            <Flex justifyContent="center" alignItems="center">
+              <Text currencyType>N</Text>
+              <Text>3000</Text>
+            </Flex>
+            <hr />
+          </Box>
+        </Flex>
+      </Link>
       <Flex
         height="200px"
         alignItems="center"
@@ -71,5 +80,4 @@ const Aside = ({width, closeButton, onClose}) => {
   );
 };
 
-
-export default Aside
+export default Aside;

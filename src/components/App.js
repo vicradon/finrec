@@ -5,6 +5,7 @@ import Dashboard from './Dashboard/Dashboard';
 import About from './About';
 import Settings from './Settings';
 import Transactions from './Transactions';
+import UserProfile from './user/UserProfile';
 import NotFound from './NotFound';
 import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
 import customTheme from '../utils/theme';
@@ -16,6 +17,7 @@ function App() {
         <Dashboard path="/" />
         <About path="/about" />
         <Settings path="/settings" />
+        <UserProfile path="/user-profile" />
         <Transactions path = "/transactions" />
         <NotFound default />
       </Router>
