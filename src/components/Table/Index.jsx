@@ -12,9 +12,6 @@ import {
 import { connect } from "react-redux";
 
 const Table = ({ dataPoints, isLoading }) => {
-  if (dataPoints){
-    console.log(dataPoints.data[0])
-  }
   return (
     <Flex>
       {isLoading ? (

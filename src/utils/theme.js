@@ -9,6 +9,7 @@ const customTheme = {
       800: "#153e75",
       700: "#2a69ac",
     },
+    primary: "#5f8af8",
     brandBackground: '#eef4f8'
   },
   breakpoints: ["30em", "48em", "62em", "80em"],

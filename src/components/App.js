@@ -4,7 +4,7 @@ import Layout from './Layout/index';
 import Dashboard from './Dashboard/Dashboard';
 import About from './About';
 import Settings from './Settings';
-import Transactions from './Transactions';
+import Transactions from './Transactions/Index';
 import NotFound from './NotFound';
 import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
 import customTheme from '../utils/theme';
