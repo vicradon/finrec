@@ -2,14 +2,14 @@ import React from "react";
 import { Flex, Text, Box } from "@chakra-ui/core";
 import Table from "../Table/Index";
 import Filters from "./Filters";
+import { useSelector } from "react-redux";
 
 const Transactions = () => {
-  const [width, setWidth] = React.useState(window.innerWidth);
-  window.addEventListener("resize", (e) => setWidth(e.target.innerWidth));
+  const width = useSelector((state) => state.resizeReducer.width);
 
   return (
     <Flex direction="column">
-      {width > 768 ? (
+      {width > 900 ? (
         <Box>
           <Box height="100%" marginRight="270px">
             <Text>Transactions</Text>
@@ -20,7 +20,7 @@ const Transactions = () => {
           </Box>
         </Box>
       ) : (
-        <Box height="100%" marginRight="270px">
+        <Box height="100%">
           <Text>Transactions</Text>
           <Table />
         </Box>

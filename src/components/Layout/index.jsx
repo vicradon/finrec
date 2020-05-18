@@ -2,9 +2,11 @@ import React from "react";
 import { Box, useColorMode } from "@chakra-ui/core";
 import Aside from "./Aside";
 import NavBar from "./NavBar";
+import { useSelector } from 'react-redux'
 
 const Layout = ({ children }) => {
-  const [width, setWidth] = React.useState(window.innerWidth);
+  const width = useSelector(state => state.resizeReducer.width);
+  console.log(width)
   const { colorMode } = useColorMode();
 
   const myBgColor = {
@@ -12,7 +14,7 @@ const Layout = ({ children }) => {
     dark: "#1a202c",
   };
 
-  window.addEventListener("resize", (e) => setWidth(e.target.innerWidth));
+  // window.addEventListener("resize", (e) => setWidth(e.target.innerWidth));
   return (
     <div>
       {width < 768 ? (
