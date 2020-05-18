@@ -2,7 +2,7 @@ import React from "react";
 import {
   // Button,
   // Avatar,
-  // Box,
+  Box,
   // Grid,
   Flex,
   Text,
@@ -10,18 +10,31 @@ import {
   // LightMode,
 } from "@chakra-ui/core";
 import { connect } from "react-redux";
+import Shell, { EmptyShell } from "./Shell";
 
 const Table = ({ dataPoints, isLoading }) => {
+  // React.useEffect(() => {
+  //   if (!isLoading) {
+  //     setState((state) => ({ ...state, dataPoints }));
+  //   }
+  // }, [dataPoints, isLoading]);
+  // return (
+  //   <EmptyShell
+  //     name="Transactions 1"
+  //     options={{ edit: "edit", delete: "delete" }}
+  //   />
+  // );
+
   return (
     <Flex>
       {isLoading ? (
-        <Text>loading...</Text>
+        <EmptyShell name="Transactions 1" />
       ) : (
-        <Text>
-          Data loaded
-          <br />
-          {dataPoints.data[0].description}
-        </Text>
+        <Shell
+          name="Transactions 2"
+          options={{ edit: "edit", delete: "delete" }}
+          data={dataPoints}
+        />
       )}
     </Flex>
   );

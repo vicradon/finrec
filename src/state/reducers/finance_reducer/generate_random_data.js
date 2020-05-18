@@ -1,4 +1,5 @@
 import dataPoint from './datapoint'
+import { v4 as uuidv4 } from 'uuid';
 
 const generateRandomData = (length) => {
   const data = []
@@ -24,6 +25,7 @@ const generateRandomData = (length) => {
 
   for (let i = 0; i < length; i++) {
     const aDataPoint = new dataPoint({
+      id: uuidv4(),
       category: categories[getRandomIndex(categories)],
       date: getRandomDate(),
       paymentMode: paymentModes[getRandomIndex(paymentModes)],

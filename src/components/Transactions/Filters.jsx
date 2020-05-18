@@ -21,7 +21,7 @@ const Filters = () => {
       position="fixed"
       right="0"
       top="0"
-      width="200px"
+      width="270px"
       backgroundColor="#fff"
     >
       <Flex alignItems="center" height="50px" bg="gray.300">

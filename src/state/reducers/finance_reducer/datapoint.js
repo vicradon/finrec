@@ -1,6 +1,7 @@
 class dataPoint {
   constructor(options) {
-    const { category, date, paymentMode, description, amount, isChecked, cashFlow } = options
+    const { id, category, date, paymentMode, description, amount, isChecked, cashFlow } = options
+    this.id = id
     this.category = category
     this.date = date
     this.paymentMode = paymentMode
