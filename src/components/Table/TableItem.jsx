@@ -1,10 +1,15 @@
 import React from "react";
-import { Box, Text, Flex, Checkbox, Grid } from "@chakra-ui/core";
-import { useSelector } from "react-redux";
+import { Box, Text, Flex, Checkbox, Grid, Button } from "@chakra-ui/core";
+import { useSelector, useDispatch } from "react-redux";
 import styles from "./shell.module.css";
 
-const TableItem = ({ date, category, paymentMode, description, amount }) => {
+const TableItem = ({ dataObject }) => {
+  const { date, category, paymentMode, description, amount } = dataObject;
   const width = useSelector((state) => state.resizeReducer.width);
+  const numberOfSelected = useSelector(
+    (state) => state.financeReducer.numberOfSelected
+  );
+  const count = useSelector((state) => state.financeReducer.count);
 
   const icon = (category) => {
     switch (category) {
@@ -14,50 +19,59 @@ const TableItem = ({ date, category, paymentMode, description, amount }) => {
         break;
     }
   };
-  return (
-    <Grid
-      // columnGap="10px"
-      // rowGap="20px"
-      // gridTemplateColumns="0.5fr 2fr 2.25fr 2.25fr 4fr 1fr"
-      // width="100%"
-      className={styles.tableHead}
-    >
-      <Checkbox />
 
-      {width > 1100 ? (
+  const dispatch = useDispatch();
+
+  const handleCheck = (event) => {
+    dataObject.toggleCheck();
+
+    dispatch({ type: "INCREMENT_COUNT" });
+    dispatch({ type: "REPAINT_UI" });
+  };
+
+  return (
+    <Box>
+      <Grid onClick={handleCheck} className={styles.tableHead}>
+        <Checkbox onChange={handleCheck} isChecked={dataObject.isChecked} />
+        {/* <Button onClick={() => dispatch({ type: "INCREMENT_COUNT" })}>
+          {count}
+        </Button> */}
+        {width > 1100 ? (
+          <Text color="#333" fontWeight="400" fontSize=".9em">
+            {category}
+          </Text>
+        ) : (
+          <Text color="#333" fontWeight="400" fontSize=".9em">
+            {category}
+            <br />
+            {description}
+          </Text>
+        )}
+        {width > 1100 ? (
+          <Text color="#333" fontWeight="400" fontSize=".9em">
+            {date}
+          </Text>
+        ) : (
+          ""
+        )}
         <Text color="#333" fontWeight="400" fontSize=".9em">
-          {category}
+          {paymentMode}
         </Text>
-      ) : (
-        <Text color="#333" fontWeight="400" fontSize=".9em">
-          {category}
+        {width > 1100 ? (
+          <Text color="#333" fontWeight="400" fontSize=".9em">
+            {description}
+          </Text>
+        ) : (
+          ""
+        )}
+        <Text justifySelf="end" color="#333" fontWeight="400" fontSize=".9em">
+          {amount}
           <br />
-          {description}
-        </Text>
-      )}
-      {width > 1100 ? (
-        <Text color="#333" fontWeight="400" fontSize=".9em">
           {date}
         </Text>
-      ) : (
-        ""
-      )}
-      <Text color="#333" fontWeight="400" fontSize=".9em">
-        {paymentMode}
-      </Text>
-      {width > 1100 ? (
-        <Text color="#333" fontWeight="400" fontSize=".9em">
-          {description}
-        </Text>
-      ) : (
-        ""
-      )}
-      <Text justifySelf="end" color="#333" fontWeight="400" fontSize=".9em">
-        {amount}
-        <br />
-        {date}
-      </Text>
-    </Grid>
+      </Grid>
+      <hr />
+    </Box>
   );
 };
 

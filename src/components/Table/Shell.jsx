@@ -30,9 +30,8 @@ export const EmptyShell = ({ name }) => {
 };
 
 const Shell = ({ data, name, options }) => {
+  
   const width = useSelector((state) => state.resizeReducer.width);
-
-  console.log(data);
   return (
     <Flex
       direction="column"
@@ -50,7 +49,7 @@ const Shell = ({ data, name, options }) => {
         // gridTemplateColumns="0.5fr 2fr 2.25fr 2.25fr 4fr 1fr"
         // width="100%"
       >
-        <Checkbox />
+        <Checkbox isIndeterminate={true}/>
         <Text color="#333" fontWeight="600">
           Category
         </Text>
@@ -71,30 +70,31 @@ const Shell = ({ data, name, options }) => {
         ) : (
           ""
         )}
-        <Text justifySelf = "end" color="#333" fontWeight="600">
+        <Text justifySelf="end" color="#333" fontWeight="600">
           Amount
         </Text>
       </Grid>
       <Grid rowGap=".8rem">
         {data.data.map((x, i) => {
           return (
-            <>
-              <TableItem
-                key={x.id}
-                dataId={x.id}
-                date={x.date}
-                category={x.category}
-                paymentMode={x.paymentMode}
-                description={x.description}
-                amount={x.amount}
-              />
-              <hr />
-            </>
+            <TableItem
+              key={x.id}
+              
+              dataObject = {x}
+
+            />
           );
         })}
       </Grid>
     </Flex>
   );
 };
+
+// id={x.id}
+// date={x.date}
+// category={x.category}
+// paymentMode={x.paymentMode}
+// description={x.description}
+// amount={x.amount}
 
 export default Shell;
