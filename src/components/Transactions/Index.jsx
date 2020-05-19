@@ -6,11 +6,11 @@ import { useSelector } from "react-redux";
 import Header from "./Header";
 
 const Transactions = () => {
-  const width = useSelector((state) => state.resizeReducer.width);
+  const { width, bp1 } = useSelector((state) => state.resizeReducer);
 
   return (
     <Flex direction="column">
-      {width > 900 ? (
+      {width > bp1 ? (
         <Box>
           <Box height="100%" marginRight="270px">
             <Text>Transactions</Text>

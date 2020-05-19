@@ -2,7 +2,11 @@ const initialState = {
   dataPoints: "",
   isLoading: true,
   count: 1,
-  numberOfSelected: 0,
+  currentlySelected: [],
+
+  get numberOfSelected() {
+    return this.currentlySelected.length;
+  },
 };
 
 const financeReducer = (state = initialState, action) => {
@@ -21,6 +25,27 @@ const financeReducer = (state = initialState, action) => {
       return {
         ...state,
         count: state.count + 1,
+      };
+    }
+    case "PUSH_TO_SELECTED": {
+      return {
+        ...state,
+        currentlySelected: [...state.currentlySelected, action.dataObject],
+      };
+    }
+    case "REMOVE_FROM_SELECTED": {
+
+      return {
+        ...state,
+        currentlySelected: state.currentlySelected.filter(
+          (x) => x !== action.dataObject
+        ),
+      };
+    }
+    case "ALTER_SELECTED": {
+      return {
+        ...state,
+        numberOfSelected: state.numberOfSelected + action.value,
       };
     }
     default: {

@@ -26,9 +26,10 @@ const Filters = () => {
       right="0"
       top="0"
       width={filtersWidth}
-      backgroundColor="#fff"
+      boxShadow = {width > bp1 ? "0px 0px 15px -5px rgba(0,0,0,0.75)": ""}
+      // backgroundColor="#fff"
     >
-      <Flex alignItems="center" height="50px" bg="gray.300">
+      <Flex alignItems="center" height="50px" borderBottom = "1px solid lightgray">
         <Heading margin="0 10px" as="h3" fontSize="xl">
           Filters
         </Heading>

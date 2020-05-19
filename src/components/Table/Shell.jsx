@@ -1,8 +1,18 @@
 import React from "react";
-import { Flex, Box, Text, Checkbox, Grid } from "@chakra-ui/core";
+import {
+  Flex,
+  useDisclosure,
+  Text,
+  Checkbox,
+  Grid,
+  Icon,
+  useColorMode,
+} from "@chakra-ui/core";
 import TableItem from "./TableItem";
 import { useSelector } from "react-redux";
 import styles from "./shell.module.css";
+import EditModal from "./EditModal";
+import DeleteModal from "./DeleteModal";
 
 export const EmptyShell = ({ name }) => {
   return (
@@ -29,72 +39,90 @@ export const EmptyShell = ({ name }) => {
   );
 };
 
-const Shell = ({ data, name, options }) => {
-  
-  const width = useSelector((state) => state.resizeReducer.width);
+const Shell = ({ data, name }) => {
+  const { width } = useSelector((state) => state.resizeReducer);
+  const { currentlySelected } = useSelector((state) => state.financeReducer);
+
+  const deleteColor = currentlySelected.length > 0 ? "red.500" : "gray.300";
+  const editColor = currentlySelected.length === 1 ? "" : "gray.300";
+  const {
+    isOpen: editIsOpen,
+    onOpen: editOnOpen,
+    onClose: editClose,
+  } = useDisclosure();
+  const {
+    isOpen: deleteIsOpen,
+    onOpen: deleteOnOpen,
+    onClose: deleteClose,
+  } = useDisclosure();
+
+  const { colorMode } = useColorMode();
+  const tableHeaderColor = colorMode === 'light'? 'gray.700': 'gray.50'
+
   return (
     <Flex
       direction="column"
-      backgroundColor="white"
-      boxShadow=""
+      backgroundColor={colorMode === "light" ? "white" : "gray"}
+      boxShadow="0px 0px 15px -2px rgba(0,0,0,0.35)"
       padding="0.5rem 1rem"
       width="100%"
     >
-      <Flex>{name}</Flex>
-      <Grid
-        marginBottom="0.5rem"
-        className={styles.tableHead}
-        // columnGap="10px"
-        // rowGap="20px"
-        // gridTemplateColumns="0.5fr 2fr 2.25fr 2.25fr 4fr 1fr"
-        // width="100%"
-      >
-        <Checkbox isIndeterminate={true}/>
-        <Text color="#333" fontWeight="600">
+      <Flex justify="space-between">
+        <Text>{name}</Text>
+        <Flex>
+          <Icon
+            color={editColor}
+            mx="5px"
+            aria-label="edit transaction"
+            name="edit"
+            cursor={Boolean(editColor) ? "" : "pointer"}
+            onClick={Boolean(editColor) ? null : editOnOpen}
+          />
+          <Icon
+            color={deleteColor}
+            mx="5px"
+            aria-label="delete transaction"
+            name="delete"
+            cursor={deleteColor === "red.500" ? "pointer" : ""}
+            onClick={deleteColor === "red.500" ? deleteOnOpen : null}
+          />
+        </Flex>
+      </Flex>
+      <EditModal isOpen={editIsOpen} onClose={editClose} />
+      <DeleteModal isOpen={deleteIsOpen} onClose={deleteClose} />
+      <Grid marginBottom="0.5rem" className={styles.tableHead}>
+        <Checkbox isIndeterminate={true} />
+        <Text color={tableHeaderColor} fontWeight="600">
           Category
         </Text>
         {width > 1100 ? (
-          <Text color="#333" fontWeight="600">
+          <Text color={tableHeaderColor} fontWeight="600">
             Date
           </Text>
         ) : (
           ""
         )}
-        <Text justifyItems="end" color="#333" fontWeight="600">
+        <Text justifyItems="end" color={tableHeaderColor} fontWeight="600">
           Payment Mode
         </Text>
         {width > 1100 ? (
-          <Text color="#333" fontWeight="600">
+          <Text color={tableHeaderColor} fontWeight="600">
             Description
           </Text>
         ) : (
           ""
         )}
-        <Text justifySelf="end" color="#333" fontWeight="600">
+        <Text justifySelf="end" color={tableHeaderColor} fontWeight="600">
           Amount
         </Text>
       </Grid>
       <Grid rowGap=".8rem">
         {data.data.map((x, i) => {
-          return (
-            <TableItem
-              key={x.id}
-              
-              dataObject = {x}
-
-            />
-          );
+          return <TableItem key={x.id} dataObject={x} />;
         })}
       </Grid>
     </Flex>
   );
 };
-
-// id={x.id}
-// date={x.date}
-// category={x.category}
-// paymentMode={x.paymentMode}
-// description={x.description}
-// amount={x.amount}
 
 export default Shell;

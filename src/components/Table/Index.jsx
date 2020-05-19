@@ -2,28 +2,20 @@ import React from "react";
 import {
   // Button,
   // Avatar,
-  Box,
+  // Box,
   // Grid,
   Flex,
-  Text,
+  // Text,
   // useColorMode,
   // LightMode,
 } from "@chakra-ui/core";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import Shell, { EmptyShell } from "./Shell";
 
-const Table = ({ dataPoints, isLoading }) => {
-  // React.useEffect(() => {
-  //   if (!isLoading) {
-  //     setState((state) => ({ ...state, dataPoints }));
-  //   }
-  // }, [dataPoints, isLoading]);
-  // return (
-  //   <EmptyShell
-  //     name="Transactions 1"
-  //     options={{ edit: "edit", delete: "delete" }}
-  //   />
-  // );
+const Table = () => {
+  const { dataPoints, isLoading } = useSelector(
+    (state) => state.financeReducer
+  );
 
   return (
     <Flex>
@@ -32,7 +24,6 @@ const Table = ({ dataPoints, isLoading }) => {
       ) : (
         <Shell
           name="Transactions 2"
-          options={{ edit: "edit", delete: "delete" }}
           data={dataPoints}
         />
       )}
@@ -40,14 +31,4 @@ const Table = ({ dataPoints, isLoading }) => {
   );
 };
 
-const mapState = (originalStateObject) => {
-  const state = originalStateObject.financeReducer;
-  return {
-    dataPoints: state.dataPoints,
-    isLoading: state.isLoading,
-  };
-};
-
-const mapDispatch = {};
-
-export default connect(mapState, mapDispatch)(Table);
+export default Table;
