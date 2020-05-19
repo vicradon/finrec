@@ -6,8 +6,8 @@ import styles from "./shell.module.css";
 const TableItem = ({ dataObject }) => {
   const { date, category, paymentMode, description, amount } = dataObject;
   const width = useSelector((state) => state.resizeReducer.width);
-  const numberOfSelected = useSelector(
-    (state) => state.financeReducer.numberOfSelected
+  const currentlySelected = useSelector(
+    (state) => state.financeReducer.currentlySelected
   );
   const count = useSelector((state) => state.financeReducer.count);
 

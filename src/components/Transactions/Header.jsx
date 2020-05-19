@@ -11,7 +11,7 @@ const Header = () => {
     <Flex my="1rem" className="transactionHeader">
       <style>{`.transactionHeader *:not(:last-child) { margin-right: 1rem}`}</style>
       <Input placeholder="eggs and ham" />
-      <Button>Search</Button>
+      <Button>Add transaction</Button>
       {width > 900 ? "" : <Button onClick = {onOpen}>Filters</Button>}
       <FilterDrawer  isOpen = {isOpen} onClose = {onClose} />
     </Flex>

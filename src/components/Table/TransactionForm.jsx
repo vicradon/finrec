@@ -6,31 +6,36 @@ import {
   FormErrorMessage,
   Input,
   Button,
+  Select,
 } from "@chakra-ui/core";
 
-function TransactionForm() {
-  function validateName(value) {
-    let error;
+const TransactionForm = ({ initialValues }) => {
+  const validateDescription = (value) => {
     if (!value) {
-      error = "Name is required";
-    } else if (value !== "Naruto") {
-      error = "Jeez! You're not a fan 😱";
+      return "Description is required";
+    } else if (value.length > 30) {
+      return "Description is too long";
     }
-    return error;
-  }
-  function validateEmail(value) {
-    let error;
+  };
+  const validateAmount = (value) => {
     if (!value) {
-      error = "Email is required";
-    } else if (value !== "email") {
-      error = "Wrong email";
+      return "Amount is required";
     }
-    return error;
-  }
+  };
+  const validateCategory = (value) => {
+    if (!value) {
+      return "Category is required";
+    }
+  };
+  const validatePaymentMode = (value) => {
+    if (!value) {
+      return "Payment mode is required";
+    }
+  };
 
   return (
     <Formik
-      initialValues={{ name: "Sasuke", amount: 459 }}
+      initialValues={initialValues}
       onSubmit={(values, actions) => {
         setTimeout(() => {
           alert(JSON.stringify(values, null, 2));
@@ -40,103 +45,66 @@ function TransactionForm() {
     >
       {(props) => (
         <form onSubmit={props.handleSubmit}>
-          <Field name="name" validate={validateName}>
+          <Field name="category" validate={validateCategory}>
             {({ field, form }) => (
-              <FormControl isInvalid={form.errors.name && form.touched.name}>
-                <FormLabel htmlFor="name">First name</FormLabel>
-                <Input {...field} id="name" placeholder="name" />
-                <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+              <FormControl
+                isInvalid={form.errors.category && form.touched.category}
+              >
+                <FormLabel htmlFor="category">Category</FormLabel>
+
+                <Select {...field} placeholder="Select Category">
+                  <option value="feeding">Feeding</option>
+                  <option value="clothing">Clothing</option>
+                  <option value="entertainment">Entertainment</option>
+                </Select>
+                <FormErrorMessage>{form.errors.category}</FormErrorMessage>
               </FormControl>
             )}
           </Field>
-          <Field name="email" validate={validateEmail}>
+          <Field name="paymentMode" validate={validatePaymentMode}>
             {({ field, form }) => (
-              <FormControl isInvalid={form.errors.email && form.touched.email}>
-                <FormLabel htmlFor="name">Email</FormLabel>
-                <Input type = "number" {...field} id="email" placeholder="email" />
-                <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+              <FormControl
+                isInvalid={form.errors.paymentMode && form.touched.paymentMode}
+              >
+                <FormLabel htmlFor="paymentMode">Payment Mode</FormLabel>
+
+                <Select {...field} placeholder="Select Payment Mode">
+                  <option value="cash">Cash</option>
+                  <option value="debitCard">Debit Card</option>
+                  <option value="creditCard">Credit Card</option>
+                </Select>
+                <FormErrorMessage>{form.errors.paymentMode}</FormErrorMessage>
               </FormControl>
             )}
           </Field>
-          <Button
-            mt={4}
-            variantColor="teal"
-            isLoading={props.isSubmitting}
-            type="submit"
-          >
-            Submit
-          </Button>
-        </form>
-      )}
-    </Formik>
-  );
-}
-
-export default TransactionForm;
-
-/*
-import React from "react";
-import { Formik, Field } from "formik";
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  Input,
-  Button,
-} from "@chakra-ui/core";
-
-const TransactionForm = ({ mode, initialValues }) => {
-  function validateDescription(value) {
-    let cleanValue;
-    if (value) {
-      cleanValue = `${value}`.trim();
-      if (cleanValue.length > 20) {
-        return "Description is too long";
-      }
-    }
-  }
-  function validateAmount(value) {
-    let cleanValue;
-    if (value) {
-      cleanValue = `${value}`.trim();
-      if (cleanValue.length === 0) {
-        return "You supplied no value!";
-      }
-      if (typeof cleanValue !== "number") {
-        return "You supplied a non-numeric value";
-      }
-    }
-  }
-
-  return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values, actions) => {
-        console.log(JSON.stringify(values, null, 2));
-        actions.setSubmitting(false);
-      }}
-    >
-      {(props) => (
-        <form onSubmit={props.handleSubmit}>
           <Field name="description" validate={validateDescription}>
             {({ field, form }) => (
-              <FormControl isInvalid={form.errors.name && form.touched.name}>
+              <FormControl
+                isInvalid={form.errors.description && form.touched.description}
+              >
                 <FormLabel htmlFor="description">Description</FormLabel>
                 <Input
                   {...field}
                   id="description"
-                  placeholder="Monthly TV subscription"
+                  placeholder="Monthly cable subscription"
                 />
-                <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                <FormErrorMessage>{form.errors.description}</FormErrorMessage>
               </FormControl>
             )}
           </Field>
           <Field name="amount" validate={validateAmount}>
             {({ field, form }) => (
-              <FormControl isInvalid={form.errors.name && form.touched.name}>
-                <FormLabel htmlFor="amount">Amount</FormLabel>
-                <Input {...field} id="amount" placeholder="2000" />
-                <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+              <FormControl
+                isInvalid={form.errors.amount && form.touched.amount}
+              >
+                <FormLabel htmlFor="name">Amount</FormLabel>
+                <Input
+                  type="number"
+                  {...field}
+                  id="amount"
+                  placeholder="2000"
+                />
+                <FormErrorMessage>{form.errors.amount}</FormErrorMessage>
               </FormControl>
             )}
           </Field>
@@ -146,7 +114,7 @@ const TransactionForm = ({ mode, initialValues }) => {
             isLoading={props.isSubmitting}
             type="submit"
           >
-            {mode === "edit" ? "Update" : "Add"}
+            Submit
           </Button>
         </form>
       )}
@@ -155,4 +123,3 @@ const TransactionForm = ({ mode, initialValues }) => {
 };
 
 export default TransactionForm;
-*/

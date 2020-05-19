@@ -9,7 +9,7 @@ import {
   useColorMode,
 } from "@chakra-ui/core";
 import TableItem from "./TableItem";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styles from "./shell.module.css";
 import EditModal from "./EditModal";
 import DeleteModal from "./DeleteModal";
@@ -41,7 +41,10 @@ export const EmptyShell = ({ name }) => {
 
 const Shell = ({ data, name }) => {
   const { width } = useSelector((state) => state.resizeReducer);
-  const { currentlySelected } = useSelector((state) => state.financeReducer);
+  const { currentlySelected, dataPoints } = useSelector(
+    (state) => state.financeReducer
+  );
+  const dispatch = useDispatch();
 
   const deleteColor = currentlySelected.length > 0 ? "red.500" : "gray.300";
   const editColor = currentlySelected.length === 1 ? "" : "gray.300";
@@ -57,7 +60,27 @@ const Shell = ({ data, name }) => {
   } = useDisclosure();
 
   const { colorMode } = useColorMode();
-  const tableHeaderColor = colorMode === 'light'? 'gray.700': 'gray.50'
+  const tableHeaderColor = colorMode === "light" ? "gray.700" : "gray.50";
+  let isChecked = false;
+
+  let isIndeterminate = currentlySelected.length > 0 ? true : false;
+  const toggleAll = (event) => {
+    if (isIndeterminate) isIndeterminate = false;
+    isChecked = true;
+    if (currentlySelected.length > 0) {
+      dataPoints.data.forEach((x) => {
+        console.log(x.isChecked);
+        if (!x.isChecked) {
+          x.toggleCheck();
+        }
+      });
+      dispatch({ type: "REPAINT_UI" });
+    } else {
+      isChecked = true;
+      dataPoints.data.forEach((x) => x.toggleCheck());
+      dispatch({ type: "REPAINT_UI" });
+    }
+  };
 
   return (
     <Flex
@@ -91,7 +114,12 @@ const Shell = ({ data, name }) => {
       <EditModal isOpen={editIsOpen} onClose={editClose} />
       <DeleteModal isOpen={deleteIsOpen} onClose={deleteClose} />
       <Grid marginBottom="0.5rem" className={styles.tableHead}>
-        <Checkbox isIndeterminate={true} />
+        <Checkbox
+          isIndeterminate={isIndeterminate}
+          onChange={toggleAll}
+          isChecked={isChecked}
+          // isChecked={isChecked}
+        />
         <Text color={tableHeaderColor} fontWeight="600">
           Category
         </Text>
