@@ -9,7 +9,7 @@ import {
   Select,
 } from "@chakra-ui/core";
 
-const TransactionForm = ({ initialValues }) => {
+const TransactionForm = ({ initialValues, mode }) => {
   const validateDescription = (value) => {
     if (!value) {
       return "Description is required";
@@ -114,7 +114,7 @@ const TransactionForm = ({ initialValues }) => {
             isLoading={props.isSubmitting}
             type="submit"
           >
-            Submit
+            {mode === "add" ? "Add" : "Update"}
           </Button>
         </form>
       )}

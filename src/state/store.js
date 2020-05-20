@@ -5,7 +5,7 @@ import randomData from "./reducers/finance_reducer/random_data";
 const store = createStore(rootReducer);
 
 const dataPoints = new randomData({
-  length: 4,
+  length: 10,
   // dateRange: { min: '2/20/2020', max: '5/20/2020' },
   // categories: ['clothing', 'housing'],
   // cashFlow: ['income',],

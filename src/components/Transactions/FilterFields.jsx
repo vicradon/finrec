@@ -1,11 +1,13 @@
 import React from "react";
-import { Text, Box } from "@chakra-ui/core";
+import { Text, Box, Flex } from "@chakra-ui/core";
 
 const FilterFields = ({ children, name }) => {
   return (
-    <Box>
-      <Text>{name}</Text>
-      {children}
+    <Box my = "2rem">
+      <Text my = ".5rem" color = "blue" fontSize = "0.9em">{name}</Text>
+      <Flex justify="space-between" wrap="wrap">
+        {children}
+      </Flex>
     </Box>
   );
 };

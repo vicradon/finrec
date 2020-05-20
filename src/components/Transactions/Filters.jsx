@@ -9,12 +9,15 @@ import {
   CloseButton,
   Heading,
   Checkbox,
+  Select,
+  useColorMode,
 } from "@chakra-ui/core";
 import FilterFields from "./FilterFields";
 import { useSelector } from "react-redux";
 
 const Filters = () => {
   const { width, bp1 } = useSelector((state) => state.resizeReducer);
+  const { colorMode } = useColorMode();
 
   const filtersWidth = width > bp1 ? "270px" : "100%";
   return (
@@ -26,22 +29,30 @@ const Filters = () => {
       right="0"
       top="0"
       width={filtersWidth}
-      boxShadow = {width > bp1 ? "0px 0px 15px -5px rgba(0,0,0,0.75)": ""}
-      // backgroundColor="#fff"
+      // boxShadow={width > bp1 ? "0px 0px 15px -5px rgba(0,0,0,0.75)" : ""}
+      backgroundColor={colorMode === "light" ? "white" : "gray.800"}
     >
-      <Flex alignItems="center" height="50px" borderBottom = "1px solid lightgray">
+      <Flex
+        alignItems="center"
+        height="50px"
+        borderBottom="1px solid lightgray"
+      >
         <Heading margin="0 10px" as="h3" fontSize="xl">
           Filters
         </Heading>
       </Flex>
 
-      <Box padding="1rem">
+      <Box height="100vh" overflowY="auto" padding="1rem">
         <FilterFields name="Select a range"></FilterFields>
-        <FilterFields name="Category"></FilterFields>
+        <FilterFields name="Category">
+          <Select placeholder="Select Category">
+            <option value="feeding">Feeding</option>
+            <option value="clothing">Clothing</option>
+            <option value="entertainment">Entertainment</option>
+          </Select>
+        </FilterFields>
         <FilterFields name="Cashflow">
-          <Checkbox defaultIsChecked variantColor="blue">
-            Income
-          </Checkbox>
+          <Checkbox variantColor="blue">Income</Checkbox>
           <Checkbox variantColor="primary">Expense</Checkbox>
         </FilterFields>
         <FilterFields name="Payment Mode">
